@@ -3,21 +3,20 @@ import axios from "axios";
 import { saveAs } from "file-saver";
 // import sendAudioForm from "./sendAudioForm";
 import * as FFmpeg from "@ffmpeg/ffmpeg";
-import { Button } from "@mui/material";
+import { Button, Typography } from "@mui/material";
 import { CardMedia } from "@mui/material";
 import CardAudio from "../CardAudio";
 import { Box } from "@mui/system";
 
 const mimeType = "audio/mp3";
 
-const AudioRecorder = () => {
+const AudioRecorder = ({ speechText, setSpeechText, toggleWebChat }) => {
   const [permission, setPermission] = useState(false);
   const mediaRecorder = useRef(null);
   const [recordingStatus, setRecordingStatus] = useState("inactive");
   const [stream, setStream] = useState(null);
   const [audioChuncks, setAudioChuncks] = useState([]);
   const [audio, setAudio] = useState(null);
-  const [responseFromBackend, setResponseFromBackend] = useState("");
   const audioRef = useRef(null);
   const [isPlaying, SetIsPlaying] = useState(false);
   const getMicrophonePermission = async () => {
@@ -64,7 +63,7 @@ const AudioRecorder = () => {
       const handleFileSelect = (event) => {
         setSelectedFile(event.target.files[0]);
       };
-      saveAs(audioBlob, "audio1.mp3");
+      // saveAs(audioBlob, "audio1.mp3");
       handleSubmit(audioBlob);
       // ->>>>>>>>> saveAs(audioBlob, 'audio1'); <<<<<<<<<<<
     };
@@ -78,20 +77,28 @@ const AudioRecorder = () => {
     SetIsPlaying(false);
     audioRef.current.pause();
   }
+  function blobToBase64(blob, callback) {
+    const reader = new FileReader();
+    reader.onload = function () {
+      const base64String = reader.result.split(",")[1];
+      callback(base64String);
+    };
+    reader.readAsDataURL(blob);
+  }
   const handleSubmit = async (audioBlob) => {
-    // Create a FormData object to hold the file data
-    const formData = new FormData();
-    formData.append("audio", audioBlob);
-
     try {
-      // Send a POST request to the server
-      const response = await axios({
-        method: "post",
-        url: "/api/speechToTextJs", // Replace with your server endpoint
-        data: formData,
-        headers: { "Content-Type": "multipart/form-data" },
+      const headers = {
+        "Content-Type": "application/json",
+      };
+      blobToBase64(audioBlob, async function (base64String) {
+        const response = await axios.post(
+          "https://3a8c-178-20-188-157.ngrok-free.app/api/speech-to-text",
+          base64String,
+          { headers: headers }
+        );
+        setSpeechText(response.data);
+        // toggleWebChat();
       });
-
       // Handle the response (e.g., show a success message)
       console.log("Audio uploaded successfully:", response.data);
     } catch (error) {
@@ -101,7 +108,6 @@ const AudioRecorder = () => {
   };
   return (
     <Box height={"calc(100vh - 120px)"}>
-      <h1>AUDIO RECORDER</h1>
       <main>
         <div className="audio-controls">
           {!permission ? (
@@ -143,6 +149,8 @@ const AudioRecorder = () => {
           pauseAudio={pauseAudio}
         />
       )}
+
+      <Typography>{speechText}</Typography>
     </Box>
   );
 };

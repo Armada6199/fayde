@@ -11,7 +11,7 @@ import Toolbar from "@mui/material/Toolbar";
 import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
 import styled from "@emotion/styled";
-import { Paper } from "@mui/material";
+import { Grid, Paper } from "@mui/material";
 import { Stack } from "@mui/system";
 
 const drawerWidth = 240;
@@ -58,33 +58,39 @@ function DrawerAppBar(props) {
     window !== undefined ? () => window().document.body : undefined;
 
   return (
-    <Box sx={{ display: "flex", maxHeight: "60px" }}>
-      <AppBar
+    <Box sx={{ display: "flex", height: "60px", maxHeight: "60px" }}>
+      <Grid
+        container
+        alignItems={"center"}
+        justifyContent={"space-around"}
+        px={4}
         sx={{
-          maxHeight: "60px",
-          bgcolor: "primary.main",
+          bgcolor: "primary.main ",
           bgcolor: "primary.main",
         }}
       >
-        <Toolbar>
+        <Grid container item alignItems={"center"}>
           <IconButton
             color="inherit"
             aria-label="open drawer"
             edge="start"
             onClick={handleDrawerToggle}
           >
-            <MenuIcon />
+            <MenuIcon sx={{ color: "#fff" }} />
           </IconButton>
           <Typography
-            variant="h6"
+            variant="h5"
             component="div"
-            sx={{ flexGrow: 1, display: { xs: "none", sm: "block" } }}
+            sx={{
+              flexGrow: 1,
+              display: { xs: "none", sm: "block", color: "#fff" },
+            }}
           >
             INSPIRE AI
           </Typography>
-          <Button sx={{ color: "#fff" }}>Login</Button>
-        </Toolbar>
-      </AppBar>
+          <Button sx={{ color: "#fff", fontSize: 24 }}>Login</Button>
+        </Grid>
+      </Grid>
       <nav>
         <Drawer
           container={container}

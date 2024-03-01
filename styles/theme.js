@@ -71,45 +71,23 @@ export const dark = {
   },
 };
 
-const dmFont = DM_Sans({
-  weight: ["100", "200", "400", "500", "600", "700"],
-  style: ["normal"],
-  subsets: ["latin"],
-});
 const theme = createTheme({
   alternate: {
     main: "#2D3748",
     dark: "#24242b",
   },
-  cardShadow: "rgba(0, 0, 0, .11)",
-  common: {
-    black: "#000",
-    white: "#fff",
-  },
-  type: "dark",
-  primary: {
-    main: "#165634",
-    light: "#165634",
-    dark: "#165634",
-    contrastText: "rgba(0, 0, 0, 0.87)",
-  },
-  secondary: {
-    light: "#ffb74d",
-    main: "#f9b934",
-    dark: "#f57c00",
-    contrastText: "rgba(0, 0, 0, 0.87)",
-  },
-  text: {
-    primary: "#EEEEEF",
-    secondary: "#AEB0B4",
-  },
-  divider: "rgba(255, 255, 255, 0.12)",
-  background: {
-    paper: "#1A202C",
-    default: "#121212",
-    level2: "#333",
-    level1: "#2D3748",
-    footer: "#18181f",
+  palette: {
+    primary: {
+      main: "#165634",
+      light: "#45785d",
+      dark: "#0d341f",
+    },
+    secondary: {
+      light: "#ffb74d",
+      main: "#f9b934",
+      dark: "#f57c00",
+      contrastText: "rgba(0, 0, 0, 0.87)",
+    },
   },
 });
 

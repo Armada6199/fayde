@@ -4,14 +4,37 @@ import { Box, styled } from "@mui/system";
 import image from "../public/inspireLogo.png";
 import { Button, Grid, Typography } from "@mui/material";
 import Image from "next/image";
-import Load_bot from "./components/LoadBot";
-import {
-  WebChatContainer,
-  setEnableDebug,
-} from "@ibm-watson/assistant-web-chat-react";
+import { WebChatContainer } from "@ibm-watson/assistant-web-chat-react";
+import BottomNavigation from "@mui/material/BottomNavigation";
+import BottomNavigationAction from "@mui/material/BottomNavigationAction";
+import RestoreIcon from "@mui/icons-material/Restore";
+import FavoriteIcon from "@mui/icons-material/Favorite";
+import LocationOnIcon from "@mui/icons-material/LocationOn";
+
+function CustomBottomNavigation() {
+  const [value, setValue] = React.useState(0);
+
+  return (
+    <Box sx={{ width: 500 }}>
+      <BottomNavigation
+        showLabels
+        value={value}
+        onChange={(event, newValue) => {
+          setValue(newValue);
+        }}
+      >
+        <BottomNavigationAction label="Recents" icon={<RestoreIcon />} />
+        <BottomNavigationAction label="Favorites" icon={<FavoriteIcon />} />
+        <BottomNavigationAction label="Nearby" icon={<LocationOnIcon />} />
+      </BottomNavigation>
+    </Box>
+  );
+}
+
 const HeroSection = styled("section")({
   position: "relative",
   height: "calc(100vh - 120px)",
+  width: "100%",
 });
 const webChatOptions = {
   integrationID: "cf134e1a-14b7-4d0c-b7c1-4684c9d5e536", // The ID of this integration.
@@ -53,7 +76,7 @@ const HeroTitle = styled("h1")({
   "& span": {
     backgroundClip: "text",
     color: "transparent",
-    backgroundImage: "linear-gradient(to right, #2563eb, #38a3f1)",
+    backgroundImage: "linear-gradient(to right, #165634, #45785d)",
   },
 });
 
@@ -78,70 +101,80 @@ const Hero = () => {
     instance.toggleOpen();
   }, [instance]);
   return (
-    <HeroSection>
-      {/* Illustration behind hero content */}
-      <IllustrationContainer aria-hidden="true">
-        <svg
-          width="1360"
-          height="578"
-          viewBox="0 0 1360 578"
-          xmlns="http://www.w3.org/2000/svg"
-        >
-          <defs>
-            <linearGradient
-              x1="50%"
-              y1="0%"
-              x2="50%"
-              y2="100%"
-              id="illustration-01"
-            >
-              <stop stopColor="#FFF" offset="0%" />
-              <stop stopColor="#EAEAEA" offset="77.402%" />
-              <stop stopColor="#DFDFDF" offset="100%" />
-            </linearGradient>
-          </defs>
-          <g fill="url(#illustration-01)" fillRule="evenodd">
-            <circle cx="1232" cy="128" r="128" />
-            <circle cx="155" cy="443" r="64" />
-          </g>
-        </svg>
-      </IllustrationContainer>
-      <HeroContent>
-        <SectionHeader>
-          <HeroTitle data-aos="zoom-y-out">
-            Make your website <span>wonderful</span>
-          </HeroTitle>
-          <HeroDescription data-aos="zoom-y-out" data-aos-delay="150">
-            Our landing page template works on all devices, so you only have to
-            set it up once, and get beautiful results forever.
-          </HeroDescription>
-          <MaxWidthContainer data-aos="zoom-y-out" data-aos-delay="300">
-            {/* Your additional content here */}
-          </MaxWidthContainer>
-        </SectionHeader>
-      </HeroContent>
-      <Grid container justifyContent={"center"} gap={8}>
-        <Grid item>
-          <Button fullWidth variant="outlined">
-            Sign To Speech
-          </Button>
+    <Grid container item height={"calc(100vh - 160px)"}>
+      <HeroSection>
+        {/* Illustration behind hero content */}
+        <IllustrationContainer aria-hidden="true">
+          <svg
+            width="1360"
+            height="578"
+            viewBox="0 0 1360 578"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <defs>
+              <linearGradient
+                x1="50%"
+                y1="0%"
+                x2="50%"
+                y2="100%"
+                id="illustration-01"
+              >
+                <stop stopColor="#8bab9a" offset="0%" />
+                <stop stopColor="#45785d" offset="77.402%" />
+                <stop stopColor="#165634" offset="100%" />
+              </linearGradient>
+            </defs>
+            <g fill="url(#illustration-01)" fillRule="evenodd">
+              <circle cx="1232" cy="128" r="128" />
+              <circle cx="155" cy="443" r="64" />
+            </g>
+          </svg>
+        </IllustrationContainer>
+        <HeroContent>
+          <SectionHeader>
+            <HeroTitle data-aos="zoom-y-out">
+              Elevating Conversations Igniting <span>Innovation</span>
+            </HeroTitle>
+            <HeroDescription data-aos="zoom-y-out" data-aos-delay="150">
+              Our landing page template works on all devices, so you only have
+              to set it up once, and get beautiful results forever.
+            </HeroDescription>
+            <MaxWidthContainer data-aos="zoom-y-out" data-aos-delay="300">
+              {/* Your additional content here */}
+            </MaxWidthContainer>
+          </SectionHeader>
+        </HeroContent>
+        <Grid container justifyContent={"center"} gap={8}>
+          <Grid item>
+            <Button fullWidth variant="outlined">
+              Sign To Speech
+            </Button>
+          </Grid>
+          <Grid item>
+            <Button fullWidth variant="contained" onClick={toggleWebChat}>
+              Try Assistant Now
+            </Button>
+          </Grid>
+          <CustomBottomNavigation />
         </Grid>
-        <Grid item>
-          <Button fullWidth variant="contained" onClick={toggleWebChat}>
-            Try Assistant Now
-          </Button>
-        </Grid>
-        <Grid container item justifyContent={"center"}>
-          <Image src={image} alt="landingimage" />
-          {/* <Typography variant="h1" color={"darkgreen"}>
-            INSPIRE
-          </Typography> */}
-        </Grid>
-      </Grid>
-      {/* {Load_bot()} */}
-      <WebChatContainer config={webChatOptions} onBeforeRender={setInstance} />
-    </HeroSection>
+
+        <Grid container item></Grid>
+        {/* {Load_bot()} */}
+        <WebChatContainer
+          config={webChatOptions}
+          onBeforeRender={setInstance}
+        />
+      </HeroSection>
+    </Grid>
   );
 };
 
 export default Hero;
+{
+  /* <Grid container item justifyContent={"center"}>
+            <Image src={image} alt="landingimage" />
+            <Typography variant="h1" color={"darkgreen"}>
+            INSPIRE
+          </Typography>
+          </Grid> */
+}
