@@ -1,0 +1,28 @@
+.video-container {
+  width: 100%;
+  max-width: 800px;
+  margin: 0 auto;
+  position: relative;
+}
+
+/* Style the video itself */
+video {
+  width: 100%;
+  height: auto;
+  display: block;
+  border: 2px solid #ccc;
+  box-shadow: 0 0 5px rgba(0, 0, 0, 0.3);
+}
+
+/* Style custom play button */
+video::-webkit-media-controls-play-button {
+  background-color: #ff5722;
+  color: #fff;
+  border: none;
+  font-size: 1.5rem;
+}
+
+/* Hide default controls */
+video::-webkit-media-controls {
+  display: none;
+}
