@@ -1,36 +1,15 @@
 "use client";
-import React, { useCallback, useState } from "react";
-import { Box, styled } from "@mui/system";
-import image from "../public/inspireLogo.png";
-import { Button, Grid, Typography } from "@mui/material";
-import Image from "next/image";
+import React, { useCallback, useEffect, useState } from "react";
+import { styled } from "@mui/system";
+import FeaturesHOC from "./components/FeaturesHOC.jsx";
+import { Button, Grid, Modal, Typography } from "@mui/material";
 import { WebChatContainer } from "@ibm-watson/assistant-web-chat-react";
-import BottomNavigation from "@mui/material/BottomNavigation";
-import BottomNavigationAction from "@mui/material/BottomNavigationAction";
-import RestoreIcon from "@mui/icons-material/Restore";
-import FavoriteIcon from "@mui/icons-material/Favorite";
-import LocationOnIcon from "@mui/icons-material/LocationOn";
-
-function CustomBottomNavigation() {
-  const [value, setValue] = React.useState(0);
-
-  return (
-    <Box sx={{ width: 500 }}>
-      <BottomNavigation
-        showLabels
-        value={value}
-        onChange={(event, newValue) => {
-          setValue(newValue);
-        }}
-      >
-        <BottomNavigationAction label="Recents" icon={<RestoreIcon />} />
-        <BottomNavigationAction label="Favorites" icon={<FavoriteIcon />} />
-        <BottomNavigationAction label="Nearby" icon={<LocationOnIcon />} />
-      </BottomNavigation>
-    </Box>
-  );
-}
-
+import MicIcon from "@mui/icons-material/Mic";
+import VideocamIcon from "@mui/icons-material/Videocam";
+import SignLanguageIcon from "@mui/icons-material/SignLanguage";
+import RecordVoiceOverIcon from "@mui/icons-material/RecordVoiceOver";
+import { glassmorphismStyle } from "@/styles/styles";
+import ChatIcon from "@mui/icons-material/Chat";
 const HeroSection = styled("section")({
   position: "relative",
   height: "calc(100vh - 120px)",
@@ -44,7 +23,6 @@ const webChatOptions = {
   // Note that there is no onLoad property here. The WebChatContainer component will override it.
   // Use the onBeforeRender or onAfterRender prop instead.
 };
-
 const IllustrationContainer = styled("div")({
   position: "absolute",
   left: "50%",
@@ -58,6 +36,7 @@ const HeroContent = styled("div")({
   maxWidth: "6xl",
   margin: "auto",
   padding: "4rem 2rem",
+  bgcolor: "#f3f3f3",
 });
 
 const SectionHeader = styled("div")({
@@ -96,9 +75,36 @@ const MaxWidthContainer = styled("div")({
 });
 
 const Hero = () => {
+  [];
   const [instance, setInstance] = useState(null);
+  const [open, setOpen] = React.useState({
+    speechToText: false,
+    videoToText: false,
+    textToSign: false,
+    textToSpeech: false,
+  });
+
+  const handleOpen = (text) => {
+    setOpen((prev) => ({ ...prev, [text]: true }));
+    setActiveFeature(text);
+  };
+  const handleClose = () => {
+    setOpen((prev) => ({ ...prev, [activeFeature]: false }));
+  };
+
   const toggleWebChat = useCallback(() => {
     instance.toggleOpen();
+  }, [instance]);
+  const [activeFeature, setActiveFeature] = useState("");
+  useEffect(() => {
+    console.log(instance);
+    instance?.send("hello");
+    instance?.on({
+      type: "receive",
+      handler: (e) => {
+        console.log(e.data.output.generic[0].text);
+      },
+    });
   }, [instance]);
   return (
     <Grid container item height={"calc(100vh - 160px)"}>
@@ -106,8 +112,8 @@ const Hero = () => {
         {/* Illustration behind hero content */}
         <IllustrationContainer aria-hidden="true">
           <svg
-            width="1360"
-            height="578"
+            width="100vw"
+            height="100vh"
             viewBox="0 0 1360 578"
             xmlns="http://www.w3.org/2000/svg"
           >
@@ -125,7 +131,7 @@ const Hero = () => {
               </linearGradient>
             </defs>
             <g fill="url(#illustration-01)" fillRule="evenodd">
-              <circle cx="1232" cy="128" r="128" />
+              <circle cx="100%" cy="80" r="128" />
               <circle cx="155" cy="443" r="64" />
             </g>
           </svg>
@@ -136,29 +142,195 @@ const Hero = () => {
               Elevating Conversations Igniting <span>Innovation</span>
             </HeroTitle>
             <HeroDescription data-aos="zoom-y-out" data-aos-delay="150">
-              Our landing page template works on all devices, so you only have
-              to set it up once, and get beautiful results forever.
+              Elevating Conversations Igniting Innovation
             </HeroDescription>
             <MaxWidthContainer data-aos="zoom-y-out" data-aos-delay="300">
               {/* Your additional content here */}
             </MaxWidthContainer>
           </SectionHeader>
+          <Grid container item justifyContent={"center"} gap={4}>
+            <Grid item xs={2}>
+              <Button fullWidth variant="outlined">
+                Explore Featuers
+              </Button>
+            </Grid>
+            <Grid item xs={2}>
+              <Button fullWidth variant="contained">
+                Try Our Assistant
+              </Button>
+            </Grid>
+          </Grid>
         </HeroContent>
-        <Grid container justifyContent={"center"} gap={8}>
-          <Grid item>
-            <Button fullWidth variant="outlined">
-              Sign To Speech
-            </Button>
-          </Grid>
-          <Grid item>
-            <Button fullWidth variant="contained" onClick={toggleWebChat}>
-              Try Assistant Now
-            </Button>
-          </Grid>
-          <CustomBottomNavigation />
-        </Grid>
 
-        <Grid container item></Grid>
+        <Grid container item justifyContent={"center"}>
+          <Grid container item xs={12} md={8} gap={4} flexWrap={"nowrap"}>
+            <Grid
+              container
+              item
+              sx={{
+                ...glassmorphismStyle,
+                cursor: "pointer",
+                textAlign: "center",
+                bgcolor: activeFeature === "speechToText" ? "primary.main" : "",
+                color:
+                  activeFeature === "speechToText" ? "#fff" : "primary.main",
+                transition: "all .5s ease-in-out",
+              }}
+              onClick={() => handleOpen("speechToText")}
+              xs={12}
+              md={3}
+              gap={2}
+              p={2}
+            >
+              <Grid item xs={12}>
+                <MicIcon
+                  sx={{
+                    fontSize: 64,
+                  }}
+                />
+              </Grid>
+              <Grid item xs={12}>
+                <Typography variant="h5">Speech To Text</Typography>
+              </Grid>
+            </Grid>
+            <Grid
+              container
+              item
+              sx={{
+                ...glassmorphismStyle,
+                cursor: "pointer",
+                textAlign: "center",
+                bgcolor: activeFeature === "signToText" ? "primary.main" : "",
+                color: activeFeature === "signToText" ? "#fff" : "primary.main",
+                transition: "all .5s ease-in-out",
+              }}
+              onClick={() => handleOpen("signToText")}
+              xs={12}
+              md={3}
+              gap={2}
+              p={2}
+            >
+              <Grid item xs={12}>
+                <VideocamIcon sx={{ fontSize: 64 }} />
+              </Grid>
+              <Grid item xs={12}>
+                <Typography variant="h5">Sign To Text</Typography>
+              </Grid>
+            </Grid>
+            <Grid
+              container
+              item
+              sx={{
+                ...glassmorphismStyle,
+                cursor: "pointer",
+                textAlign: "center",
+                bgcolor: activeFeature === "textToSign" ? "primary.main" : "",
+                color: activeFeature === "textToSign" ? "#fff" : "primary.main",
+                transition: "all .5s ease-in-out",
+              }}
+              onClick={() => handleOpen("textToSign")}
+              xs={12}
+              md={3}
+              gap={2}
+              p={2}
+            >
+              <Grid item xs={12}>
+                <SignLanguageIcon sx={{ fontSize: 64 }} />
+              </Grid>
+              <Grid item xs={12}>
+                <Typography variant="h5">Text To Sign Language</Typography>
+              </Grid>
+            </Grid>
+            <Grid
+              container
+              item
+              sx={{
+                ...glassmorphismStyle,
+                cursor: "pointer",
+                textAlign: "center",
+                bgcolor:
+                  activeFeature === "speechToSpeech" ? "primary.main" : "",
+                color:
+                  activeFeature === "speechToSpeech" ? "#fff" : "primary.main",
+                transition: "all .5s ease-in-out",
+              }}
+              onClick={() => handleOpen("speechToSpeech")}
+              xs={12}
+              md={3}
+              gap={2}
+              p={2}
+            >
+              <Grid item xs={12}>
+                <RecordVoiceOverIcon sx={{ fontSize: 64 }} />
+              </Grid>
+              <Grid item xs={12}>
+                <Typography variant="h5">Speech To Speech</Typography>
+              </Grid>
+            </Grid>
+            <Grid
+              container
+              item
+              sx={{
+                ...glassmorphismStyle,
+                cursor: "pointer",
+                textAlign: "center",
+                bgcolor: activeFeature === "textToSpeech" ? "primary.main" : "",
+                color:
+                  activeFeature === "textToSpeech" ? "#fff" : "primary.main",
+                transition: "all .5s ease-in-out",
+              }}
+              onClick={() => handleOpen("textToSpeech")}
+              xs={12}
+              md={3}
+              gap={2}
+              p={2}
+            >
+              <Grid item xs={12}>
+                <ChatIcon sx={{ fontSize: 64 }} />
+              </Grid>
+              <Grid item xs={12}>
+                <Typography variant="h5">Text To Speech</Typography>
+              </Grid>
+            </Grid>
+          </Grid>
+          <Modal
+            open={open[activeFeature] || false}
+            onClose={handleClose}
+            style={{
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              outline: "none",
+              border: "none",
+            }}
+          >
+            <Grid
+              container
+              item
+              md={8}
+              justifyContent={"center"}
+              p={4}
+              position={"relative"}
+              sx={{
+                outline: "none",
+                border: "none",
+              }}
+            >
+              <FeaturesHOC feature={activeFeature} handleClose={handleClose} />
+              {/* <ClearSharp
+                sx={{
+                  position: "absolute",
+                  top: 50,
+                  right: 100,
+                  fontSize: 68,
+                  color: "#fff",
+                  cursor: "pointer",
+                }}
+                onClick={handleClose}
+              /> */}
+            </Grid>
+          </Modal>
+        </Grid>
         {/* {Load_bot()} */}
         <WebChatContainer
           config={webChatOptions}

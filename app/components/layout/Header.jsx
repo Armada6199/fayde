@@ -58,7 +58,7 @@ function DrawerAppBar(props) {
     window !== undefined ? () => window().document.body : undefined;
 
   return (
-    <Box sx={{ display: "flex", height: "60px", maxHeight: "60px" }}>
+    <Box sx={{ display: "flex", height: "60px", maxHeight: "60px", zIndex: 4 }}>
       <Grid
         container
         alignItems={"center"}

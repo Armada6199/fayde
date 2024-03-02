@@ -40,7 +40,7 @@ function page() {
     "& span": {
       backgroundClip: "text",
       color: "transparent",
-      backgroundImage: "linear-gradient(to right, #165634, #A8EB12)",
+      backgroundImage: "linear-gradient(to right, #165634, #165634)",
     },
   });
 
@@ -68,7 +68,7 @@ function page() {
       <HeroContent>
         <SectionHeader>
           <HeroTitle data-aos="zoom-y-out">
-            Turn Video Into <span>TEXT</span>
+            Turn Speech Into <span>TEXT</span>
           </HeroTitle>
           <HeroDescription data-aos="zoom-y-out" data-aos-delay="150">
             Once you are ready click on the button below to start recording

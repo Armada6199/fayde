@@ -7,6 +7,7 @@ import { glassmorphismStyle } from "@/styles/styles";
 import TvIcon from "@mui/icons-material/Tv";
 import "../../../styles/video.css";
 import axios from "axios";
+import { Box } from "@mui/system";
 const mimeType = "video/webm";
 
 const VideoRecorder = ({ setVideoSpeech }) => {
@@ -33,15 +34,15 @@ const VideoRecorder = ({ setVideoSpeech }) => {
       };
       blobToBase64(videoBlob, async function (base64String) {
         const response = await axios.post(
-          "https://3a8c-178-20-188-157.ngrok-free.app/api/signLang-to-text",
+          "https://5c18-178-20-188-157.ngrok-free.app/api/signLang-to-text",
           base64String,
           { headers: headers }
         );
+        console.log(response.data);
         setVideoSpeech(response.data);
         // toggleWebChat();
       });
       // Handle the response (e.g., show a success message)
-      console.log("Audio uploaded successfully");
     } catch (error) {
       // Handle any errors (e.g., display an error message)
       console.error("Error uploading video:", error);
@@ -104,65 +105,73 @@ const VideoRecorder = ({ setVideoSpeech }) => {
     };
   };
   return (
-    <form noValidate>
+    <Grid container item textAlign={"center"}>
       <Grid container item>
+        <Grid
+          container
+          sx={{
+            ...glassmorphismStyle,
+            height: "60px",
+            borderRadius: "0px",
+            borderTopRightRadius: "20px",
+            borderTopLeftRadius: "20px",
+          }}
+          alignItems={"center"}
+          justifyContent={"space-around"}
+        >
+          <Grid item>
+            <StopCircleIcon
+              sx={{
+                cursor: "pointer",
+                width: 32,
+                height: 28,
+                color: "primary.main",
+              }}
+              onClick={() =>
+                recordingStatus === "recording" ? stopRecording() : null
+              }
+            />
+          </Grid>
+          <Grid item>
+            <PlayCircleIcon
+              sx={{
+                cursor: "pointer",
+                width: 32,
+                height: 28,
+                color: "primary.main",
+              }}
+              onClick={() =>
+                recordingStatus == "inactive" ? getCameraPermission() : null
+              }
+            />
+          </Grid>
+          <Grid item>
+            <SendIcon
+              sx={{
+                cursor: "pointer",
+                width: 32,
+                height: 28,
+                color: "primary.main",
+              }}
+              onClick={() => (recordedVideo ? handleSubmit(videoBlob) : null)}
+            />
+          </Grid>
+        </Grid>
         <Grid container item>
           <Grid
             container
+            item
             sx={{
-              ...glassmorphismStyle,
-              height: "60px",
-              borderRadius: "0px",
-              borderTopRightRadius: "20px",
-              borderTopLeftRadius: "20px",
+              display: recordingStatus === "recording" ? "block" : "none",
             }}
-            alignItems={"center"}
-            justifyContent={"space-around"}
           >
-            <Grid item>
-              <StopCircleIcon
-                sx={{
-                  cursor: "pointer",
-                  width: 32,
-                  height: 28,
-                  color: "primary.main",
-                }}
-                onClick={() =>
-                  recordingStatus === "recording" ? stopRecording() : null
-                }
-              />
-            </Grid>
-            <Grid item>
-              <PlayCircleIcon
-                sx={{
-                  cursor: "pointer",
-                  width: 32,
-                  height: 28,
-                  color: "primary.main",
-                }}
-                onClick={() =>
-                  recordingStatus == "inactive" ? getCameraPermission() : null
-                }
-              />
-            </Grid>
-            <Grid item>
-              <SendIcon
-                sx={{
-                  cursor: "pointer",
-                  width: 32,
-                  height: 28,
-                  color: "primary.main",
-                }}
-                onClick={() => (recordedVideo ? handleSubmit(videoBlob) : null)}
-              />
-            </Grid>
-          </Grid>
-          <Grid container item>
-            <Grid
-              container
-              item
+            <Box
               sx={{
-                display: recordingStatus === "recording" ? "block" : "none",
+                width: "100%",
+                height: "80vh",
+                borderBottomRightRadius: "20px",
+                borderBottomLeftRadius: "20px",
+                overflow: "hidden",
               }}
             >
               <video
@@ -170,49 +179,52 @@ const VideoRecorder = ({ setVideoSpeech }) => {
                 autoPlay
                 style={{
                   width: "100%",
-                  borderBottomRightRadius: "20px",
-                  borderBottomLeftRadius: "20px",
                   border: "none",
-                  height: "100%",
                 }}
               ></video>
-            </Grid>
-            {recordedVideo && (
-              <Grid container item>
-                <video
-                  src={recordedVideo}
-                  autoPlay
-                  style={{
-                    width: "100%",
-                    borderBottomRightRadius: "20px",
-                    borderBottomLeftRadius: "20px",
-                    border: "none",
-                    height: "100%",
-                  }}
-                  className="live-player"
-                ></video>
-              </Grid>
-            )}
-            {!recordedVideo && recordingStatus == "inactive" && (
-              <Grid
-                container
-                item
-                sx={{ height: "300px", width: "100%", bgcolor: "primary.main" }}
-                alignItems={"center"}
-                justifyContent={"center"}
-              >
-                <Grid item xs={12}>
-                  <TvIcon sx={{ fontSize: 120, color: "#fff" }} />
-                </Grid>
-                <Typography color={"#fff"} variant="h5">
-                  Video will appear here once started
-                </Typography>
-              </Grid>
-            )}
+            </Box>
           </Grid>
+          {recordedVideo && (
+            <Box
+              sx={{
+                width: "100%",
+                height: "80vh",
+                borderBottomRightRadius: "20px",
+                borderBottomLeftRadius: "20px",
+                overflow: "hidden",
+              }}
+            >
+              <video
+                src={recordedVideo}
+                autoPlay
+                style={{
+                  width: "100%",
+
+                  border: "none",
+                }}
+                className="live-player"
+              ></video>
+            </Box>
+          )}
+          {!recordedVideo && recordingStatus == "inactive" && (
+            <Grid
+              container
+              item
+              sx={{ height: "300px", width: "100%", bgcolor: "primary.main" }}
+              alignItems={"center"}
+              justifyContent={"center"}
+            >
+              <Grid item xs={12}>
+                <TvIcon sx={{ fontSize: 120, color: "#fff" }} />
+              </Grid>
+              <Typography color={"#fff"} variant="h5">
+                Video will appear here once started
+              </Typography>
+            </Grid>
+          )}
         </Grid>
       </Grid>
-    </form>
+    </Grid>
   );
 };
 
