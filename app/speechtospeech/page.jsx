@@ -2,22 +2,18 @@
 import { useState, useRef } from "react";
 import axios from "axios";
 import { saveAs } from "file-saver";
-// import sendAudioForm from "./sendAudioForm";
-import { Button } from "@mui/material";
-import { Box } from "@mui/system";
-import MicIcon from "@mui/icons-material/Mic";
 
 const mimeType = "audio/mp3";
 
-const AudioRecorder = ({ setSpeechText }) => {
+const AudioRecorder = () => {
   const [permission, setPermission] = useState(false);
   const mediaRecorder = useRef(null);
   const [recordingStatus, setRecordingStatus] = useState("inactive");
   const [stream, setStream] = useState(null);
   const [audioChuncks, setAudioChuncks] = useState([]);
   const [audio, setAudio] = useState(null);
-  const audioRef = useRef(null);
-  const [isPlaying, SetIsPlaying] = useState(false);
+  const [respondSpeech, setRespondSpeech] = useState("");
+
   const getMicrophonePermission = async () => {
     if ("MediaRecorder" in window) {
       try {
@@ -27,7 +23,6 @@ const AudioRecorder = ({ setSpeechText }) => {
         });
         setPermission(true);
         setStream(streamData);
-        return streamData;
       } catch (err) {
         alert(err.message);
       }
@@ -36,7 +31,6 @@ const AudioRecorder = ({ setSpeechText }) => {
     }
   };
   const startRecording = async () => {
-    const stream = await getMicrophonePermission();
     setRecordingStatus("recording");
     const media = new MediaRecorder(stream, { type: mimeType });
     mediaRecorder.current = media;
@@ -64,20 +58,11 @@ const AudioRecorder = ({ setSpeechText }) => {
       const handleFileSelect = (event) => {
         setSelectedFile(event.target.files[0]);
       };
-      // saveAs(audioBlob, "audio1.mp3");
+      saveAs(audioBlob, "audio1.mp3");
       handleSubmit(audioBlob);
       // ->>>>>>>>> saveAs(audioBlob, 'audio1'); <<<<<<<<<<<
     };
   };
-  function playAudio() {
-    SetIsPlaying(true);
-    audioRef.current.play();
-  }
-
-  function pauseAudio() {
-    SetIsPlaying(false);
-    audioRef.current.pause();
-  }
   function blobToBase64(blob, callback) {
     const reader = new FileReader();
     reader.onload = function () {
@@ -93,12 +78,13 @@ const AudioRecorder = ({ setSpeechText }) => {
       };
       blobToBase64(audioBlob, async function (base64String) {
         const response = await axios.post(
-          "https://5c18-178-20-188-157.ngrok-free.app/api/speech-to-text",
+          "https://5c18-178-20-188-157.ngrok-free.app/api/speech-to-speech?lang=en",
           base64String,
           { headers: headers }
         );
         console.log(response);
-        setSpeechText(response.data);
+        console.log(response.data);
+        setRespondSpeech(response.data);
         // toggleWebChat();
       });
     } catch (error) {
@@ -107,40 +93,38 @@ const AudioRecorder = ({ setSpeechText }) => {
     }
   };
   return (
-    <Box
-      display={"flex"}
-      height={"400px"}
-      width={"400px"}
-      flexDirection={"column"}
-      justifyContent={"center"}
-      alignItems={"center"}
-      color={"#fff"}
-      textAlign={"center"}
-      bgcolor={"primary.main"}
-      borderRadius={"50%"}
-      position={"relative"}
-      className={recordingStatus === "inactive" ? "" : "pulse_recording"}
-    >
-      <MicIcon sx={{ fontSize: 124 }} />
-      {recordingStatus === "inactive" ? (
-        <Button onClick={startRecording} sx={{ color: "#fff", fontSize: 24 }}>
-          Start Recording
-        </Button>
-      ) : null}
-      {recordingStatus === "recording" ? (
-        <Button onClick={stopRecording} sx={{ color: "#fff", fontSize: 24 }}>
-          stop Recording
-        </Button>
-      ) : null}
-      {audio ? (
-        <Box display={"none"}>
-          <audio src={audio} ref={audioRef} controls></audio>
-          <a download href={audio}>
-            Download Recording
-          </a>
-        </Box>
-      ) : null}
-    </Box>
+    <div>
+      <h2>Audio Recorder</h2>
+      <main>
+        <div className="audio-controls">
+          {!permission ? (
+            <button onClick={getMicrophonePermission} type="button">
+              Get Microphone
+            </button>
+          ) : null}
+          {permission && recordingStatus === "inactive" ? (
+            <button onClick={startRecording} type="button">
+              Start Recording
+            </button>
+          ) : null}
+          {recordingStatus === "recording" ? (
+            <button onClick={stopRecording} type="button">
+              stop Recording
+            </button>
+          ) : null}
+        </div>
+        <div>
+          {audio ? (
+            <div className="audio-container">
+              <audio src={audio} controls></audio>
+              <a download href={audio}>
+                Download Recording
+              </a>
+            </div>
+          ) : null}
+        </div>
+      </main>
+    </div>
   );
 };
 
