@@ -12,7 +12,7 @@ function layout({ children }) {
         <Providers>
           <Header />
           {children}
-          <Footer />
+          {/* <Footer /> */}
         </Providers>
       </body>
     </html>

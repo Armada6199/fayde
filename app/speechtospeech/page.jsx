@@ -2,9 +2,14 @@
 import { useState, useRef } from "react";
 import axios from "axios";
 import { saveAs } from "file-saver";
+import { WebChatContainer } from "@ibm-watson/assistant-web-chat-react";
 
 const mimeType = "audio/mp3";
-
+const webChatOptions = {
+  integrationID: "dafaa13b-18bf-4e88-aff5-649228cb84f7", // The ID of this integration.
+  region: "eu-gb", // The region your integration is hosted in.
+  serviceInstanceID: "dd8f0bab-351b-4c0d-bcfc-3ef8dcb5958c", // The ID of your service instance.
+};
 const AudioRecorder = () => {
   const [permission, setPermission] = useState(false);
   const mediaRecorder = useRef(null);
@@ -13,6 +18,7 @@ const AudioRecorder = () => {
   const [audioChuncks, setAudioChuncks] = useState([]);
   const [audio, setAudio] = useState(null);
   const [respondSpeech, setRespondSpeech] = useState("");
+  const [instance, setInstance] = useState(null);
 
   const getMicrophonePermission = async () => {
     if ("MediaRecorder" in window) {
@@ -77,14 +83,25 @@ const AudioRecorder = () => {
         "Content-Type": "application/json",
       };
       blobToBase64(audioBlob, async function (base64String) {
-        const response = await axios.post(
-          "https://5c18-178-20-188-157.ngrok-free.app/api/speech-to-speech?lang=en",
+        const clientText = await axios.post(
+          "https://5c18-178-20-188-157.ngrok-free.app/api/speech-to-text?lang=en",
           base64String,
           { headers: headers }
         );
-        console.log(response);
-        console.log(response.data);
-        setRespondSpeech(response.data);
+        console.log(clientText.data);
+        instance.send(clientText.data);
+        instance?.on({
+          type: "receive",
+          handler: async (e) => {
+            const chatBotVoice = await axios.post(
+              "https://5c18-178-20-188-157.ngrok-free.app/api/text-to-speech?lang=ar",
+              e.data.output.generic[0].text,
+              { headers: headers }
+            );
+            console.log(chatBotVoice.data, "chat bot voice resposne ");
+            setRespondSpeech(chatBotVoice.data);
+          },
+        });
         // toggleWebChat();
       });
     } catch (error) {
@@ -93,38 +110,52 @@ const AudioRecorder = () => {
     }
   };
   return (
-    <div>
-      <h2>Audio Recorder</h2>
-      <main>
-        <div className="audio-controls">
-          {!permission ? (
-            <button onClick={getMicrophonePermission} type="button">
-              Get Microphone
-            </button>
-          ) : null}
-          {permission && recordingStatus === "inactive" ? (
-            <button onClick={startRecording} type="button">
-              Start Recording
-            </button>
-          ) : null}
-          {recordingStatus === "recording" ? (
-            <button onClick={stopRecording} type="button">
-              stop Recording
-            </button>
-          ) : null}
-        </div>
-        <div>
-          {audio ? (
-            <div className="audio-container">
-              <audio src={audio} controls></audio>
-              <a download href={audio}>
-                Download Recording
-              </a>
-            </div>
-          ) : null}
-        </div>
-      </main>
-    </div>
+    <>
+      <div>
+        <h2>Audio Recorder</h2>
+        <main>
+          <div className="audio-controls">
+            {!permission ? (
+              <button onClick={getMicrophonePermission} type="button">
+                Get Microphone
+              </button>
+            ) : null}
+            {permission && recordingStatus === "inactive" ? (
+              <button onClick={startRecording} type="button">
+                Start Recording
+              </button>
+            ) : null}
+            {recordingStatus === "recording" ? (
+              <button onClick={stopRecording} type="button">
+                stop Recording
+              </button>
+            ) : null}
+          </div>
+          <div>
+            {audio ? (
+              <div className="audio-container">
+                <audio src={audio} controls></audio>
+                {/* <a download href={audio}>
+                  Download Recording
+                </a> */}
+              </div>
+            ) : null}
+            {respondSpeech ? (
+              <div className="audio-container">
+                <audio
+                  src={`data:audio/mp3;base64,${respondSpeech}`}
+                  controls
+                ></audio>
+                {/* <a download href={audio}>
+                  Download Recording
+                </a> */}
+              </div>
+            ) : null}
+          </div>
+        </main>
+      </div>
+      <WebChatContainer config={webChatOptions} onBeforeRender={setInstance} />{" "}
+    </>
   );
 };
 

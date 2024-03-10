@@ -10,6 +10,7 @@ import SignLanguageIcon from "@mui/icons-material/SignLanguage";
 import RecordVoiceOverIcon from "@mui/icons-material/RecordVoiceOver";
 import { glassmorphismStyle } from "@/styles/styles";
 import ChatIcon from "@mui/icons-material/Chat";
+import WavingHandIcon from "@mui/icons-material/WavingHand";
 const HeroSection = styled("section")({
   position: "relative",
   height: "calc(100vh - 120px)",
@@ -65,15 +66,6 @@ const HeroDescription = styled("p")({
   marginBottom: "2rem",
 });
 
-const MaxWidthContainer = styled("div")({
-  maxWidth: "48rem",
-  margin: "auto",
-  "@media (min-width: 640px)": {
-    display: "flex",
-    justifyContent: "center",
-  },
-});
-
 const Hero = () => {
   [];
   const [instance, setInstance] = useState(null);
@@ -107,7 +99,7 @@ const Hero = () => {
     });
   }, [instance]);
   return (
-    <Grid container item height={"calc(100vh - 160px)"}>
+    <Grid container item height={"calc(100vh - 60px)"} p={4} gap={4}>
       <HeroSection>
         {/* Illustration behind hero content */}
         <IllustrationContainer aria-hidden="true">
@@ -136,34 +128,9 @@ const Hero = () => {
             </g>
           </svg>
         </IllustrationContainer>
-        <HeroContent>
-          <SectionHeader>
-            <HeroTitle data-aos="zoom-y-out">
-              Elevating Conversations Igniting <span>Innovation</span>
-            </HeroTitle>
-            <HeroDescription data-aos="zoom-y-out" data-aos-delay="150">
-              Elevating Conversations Igniting Innovation
-            </HeroDescription>
-            <MaxWidthContainer data-aos="zoom-y-out" data-aos-delay="300">
-              {/* Your additional content here */}
-            </MaxWidthContainer>
-          </SectionHeader>
-          <Grid container item justifyContent={"center"} gap={4}>
-            <Grid item xs={2}>
-              <Button fullWidth variant="outlined">
-                Explore Featuers
-              </Button>
-            </Grid>
-            <Grid item xs={2}>
-              <Button fullWidth variant="contained">
-                Try Our Assistant
-              </Button>
-            </Grid>
-          </Grid>
-        </HeroContent>
 
-        <Grid container item justifyContent={"center"}>
-          <Grid container item xs={12} md={8} gap={4} flexWrap={"nowrap"}>
+        <Grid container item justifyContent={"center"} mt={4}>
+          <Grid container item xs={12} md={8} gap={4} justifyContent={"center"}>
             <Grid
               container
               item
@@ -292,6 +259,31 @@ const Hero = () => {
                 <Typography variant="h5">Text To Speech</Typography>
               </Grid>
             </Grid>
+            <Grid
+              container
+              item
+              sx={{
+                ...glassmorphismStyle,
+                cursor: "pointer",
+                textAlign: "center",
+                bgcolor: activeFeature === "textToSpeech" ? "primary.main" : "",
+                color:
+                  activeFeature === "textToSpeech" ? "#fff" : "primary.main",
+                transition: "all .5s ease-in-out",
+              }}
+              onClick={() => handleOpen("textToSpeech")}
+              xs={12}
+              md={3}
+              gap={2}
+              p={2}
+            >
+              <Grid item xs={12}>
+                <WavingHandIcon sx={{ fontSize: 64 }} />
+              </Grid>
+              <Grid item xs={12}>
+                <Typography variant="h5">Sign To Sign</Typography>
+              </Grid>
+            </Grid>
           </Grid>
           <Modal
             open={open[activeFeature] || false}
@@ -342,11 +334,31 @@ const Hero = () => {
 };
 
 export default Hero;
+
+// <HeroContent>
+// <SectionHeader>
+//   <HeroTitle data-aos="zoom-y-out">
+// Elevating Conversations Igniting <span>Innovation</span>
+//   </HeroTitle>
+//   <HeroDescription data-aos="zoom-y-out" data-aos-delay="150">
+//     Elevating Conversations Igniting Innovation
+//   </HeroDescription>
+//   <MaxWidthContainer data-aos="zoom-y-out" data-aos-delay="300">
+//     {/* Your additional content here */}
+//   </MaxWidthContainer>
+// </SectionHeader>
 {
-  /* <Grid container item justifyContent={"center"}>
-            <Image src={image} alt="landingimage" />
-            <Typography variant="h1" color={"darkgreen"}>
-            INSPIRE
-          </Typography>
-          </Grid> */
+  /* <Grid container item justifyContent={"center"} gap={4}>
+  <Grid item xs={2}>
+    <Button fullWidth variant="outlined">
+      Explore Featuers
+    </Button>
+  </Grid>
+  <Grid item xs={2}>
+    <Button fullWidth variant="contained">
+      Try Our Assistant
+    </Button>
+  </Grid>
+</Grid> */
 }
+// </HeroContent>
