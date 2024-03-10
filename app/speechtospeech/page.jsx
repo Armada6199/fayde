@@ -1,9 +1,20 @@
 "use client";
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import axios from "axios";
 import { saveAs } from "file-saver";
 import { WebChatContainer } from "@ibm-watson/assistant-web-chat-react";
+<<<<<<< HEAD
 
+=======
+const webChatOptions = {
+  integrationID: "cf134e1a-14b7-4d0c-b7c1-4684c9d5e536", // The ID of this integration.
+  region: "eu-gb", // The region your integration is hosted in.
+  serviceInstanceID: "dd8f0bab-351b-4c0d-bcfc-3ef8dcb5958c", // The ID
+  // subscriptionID: 'only on enterprise plans',
+  // Note that there is no onLoad property here. The WebChatContainer component will override it.
+  // Use the onBeforeRender or onAfterRender prop instead.
+};
+>>>>>>> be13e071d9f90bcc885bfa1fe75ddb42049edc50
 const mimeType = "audio/mp3";
 const webChatOptions = {
   integrationID: "dafaa13b-18bf-4e88-aff5-649228cb84f7", // The ID of this integration.
@@ -12,6 +23,7 @@ const webChatOptions = {
 };
 const AudioRecorder = () => {
   const [permission, setPermission] = useState(false);
+  const [instance, setInstance] = useState(null);
   const mediaRecorder = useRef(null);
   const [recordingStatus, setRecordingStatus] = useState("inactive");
   const [stream, setStream] = useState(null);
@@ -109,7 +121,16 @@ const AudioRecorder = () => {
       console.error("Error uploading video:", error);
     }
   };
+  useEffect(() => {
+    instance?.updateCSSVariables({
+      "BASE-width": "100vw",
+      "LAUNCHER-color-avatar": "#fff",
+      "LAUNCHER-color-background": "#165634",
+      "LAUNCHER-color-background-hover": "#165634",
+    });
+  }, [instance]);
   return (
+<<<<<<< HEAD
     <>
       <div>
         <h2>Audio Recorder</h2>
@@ -156,6 +177,41 @@ const AudioRecorder = () => {
       </div>
       <WebChatContainer config={webChatOptions} onBeforeRender={setInstance} />{" "}
     </>
+=======
+    <div>
+      <h2>Audio Recorder</h2>
+      <main>
+        <div className="audio-controls">
+          {!permission ? (
+            <button onClick={getMicrophonePermission} type="button">
+              Get Microphone
+            </button>
+          ) : null}
+          {permission && recordingStatus === "inactive" ? (
+            <button onClick={startRecording} type="button">
+              Start Recording
+            </button>
+          ) : null}
+          {recordingStatus === "recording" ? (
+            <button onClick={stopRecording} type="button">
+              stop Recording
+            </button>
+          ) : null}
+        </div>
+        <div>
+          {audio ? (
+            <div className="audio-container">
+              <audio src={audio} controls></audio>
+              <a download href={audio}>
+                Download Recording
+              </a>
+            </div>
+          ) : null}
+        </div>
+      </main>
+      <WebChatContainer config={webChatOptions} onBeforeRender={setInstance} />
+    </div>
+>>>>>>> be13e071d9f90bcc885bfa1fe75ddb42049edc50
   );
 };
 
