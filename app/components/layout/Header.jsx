@@ -1,28 +1,24 @@
-import * as React from "react";
-import PropTypes from "prop-types";
-import AppBar from "@mui/material/AppBar";
+import styled from "@emotion/styled";
+import MenuIcon from "@mui/icons-material/Menu";
+import { Grid, Paper } from "@mui/material";
 import Box from "@mui/material/Box";
-import CssBaseline from "@mui/material/CssBaseline";
+import Button from "@mui/material/Button";
 import Divider from "@mui/material/Divider";
 import Drawer from "@mui/material/Drawer";
 import IconButton from "@mui/material/IconButton";
-import MenuIcon from "@mui/icons-material/Menu";
-import Toolbar from "@mui/material/Toolbar";
 import Typography from "@mui/material/Typography";
-import Button from "@mui/material/Button";
-import styled from "@emotion/styled";
-import { Grid, Paper } from "@mui/material";
 import { Stack } from "@mui/system";
+import { useRouter } from "next/navigation";
+import * as React from "react";
 
 const drawerWidth = 240;
 const navActions = [
-  "Assistant",
-  "Speech to text",
-  "Text to speech",
-  "Speech to Speech",
-  "Sign Langauge To Text",
-  "Text to Sign Langauge",
-  "Sign Lanagauge to sign Langauge",
+  { text: "Speech to text", link: "speechtotext" },
+  { text: "Text to speech", link: "texttospeech" },
+  { text: "Speech to Speech", link: "speechtospeech" },
+  { text: "Sign Langauge To Text", link: "videototext" },
+  { text: "Text to Sign Langauge", link: "texttosign" },
+  { text: "Sign Lanagauge to sign Langauge", link: "signtosign" },
 ];
 const Item = styled(Paper)(({ theme }) => ({
   backgroundColor: theme.palette.mode === "dark" ? "#1A2027" : "#fff",
@@ -38,6 +34,7 @@ function DrawerAppBar(props) {
   const handleDrawerToggle = () => {
     setMobileOpen((prevState) => !prevState);
   };
+  const router = useRouter();
 
   const drawer = (
     <Box onClick={handleDrawerToggle} sx={{ textAlign: "center" }}>
@@ -47,7 +44,12 @@ function DrawerAppBar(props) {
       <Divider />
       <Stack spacing={2}>
         {navActions.map((item) => (
-          <Item>{item}</Item>
+          <Item
+            sx={{ cursor: "pointer" }}
+            onClick={() => router.push(`${item.link}`)}
+          >
+            {item.text}
+          </Item>
         ))}
       </Stack>
       <Button sx={{ color: "#fff" }}>Login</Button>

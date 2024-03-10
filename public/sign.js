@@ -31,6 +31,7 @@ import taaMarbutaAgain from "./assets/signs/ة.jpg"; // Taa Marbuta
 import SpaceBarIcon from "@mui/icons-material/SpaceBar";
 const arabicLetterImages = {
   ا: alef,
+  أ: alef,
   ب: ba,
   ت: taaMarbuta,
   ث: tha,
