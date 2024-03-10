@@ -87,7 +87,7 @@ const AudioRecorder = () => {
           base64String,
           { headers: headers }
         );
-        console.log(clientText.data);
+        // console.log(clientText.data);
         instance.send(clientText.data);
         instance?.on({
           type: "receive",

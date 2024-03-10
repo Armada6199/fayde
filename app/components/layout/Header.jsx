@@ -43,6 +43,9 @@ function DrawerAppBar(props) {
       </Typography>
       <Divider />
       <Stack spacing={2}>
+        <Item sx={{ cursor: "pointer" }} onClick={() => router.push(`/`)}>
+          Home
+        </Item>
         {navActions.map((item) => (
           <Item
             sx={{ cursor: "pointer" }}

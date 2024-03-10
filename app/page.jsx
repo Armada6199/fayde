@@ -11,6 +11,7 @@ import RecordVoiceOverIcon from "@mui/icons-material/RecordVoiceOver";
 import { glassmorphismStyle } from "@/styles/styles";
 import ChatIcon from "@mui/icons-material/Chat";
 import WavingHandIcon from "@mui/icons-material/WavingHand";
+import { useRouter } from "next/navigation";
 const HeroSection = styled("section")({
   position: "relative",
   height: "calc(100vh - 120px)",
@@ -67,7 +68,7 @@ const HeroDescription = styled("p")({
 });
 
 const Hero = () => {
-  [];
+  const router = useRouter();
   const [instance, setInstance] = useState(null);
   const [open, setOpen] = React.useState({
     speechToText: false,
@@ -139,12 +140,37 @@ const Hero = () => {
                 ...glassmorphismStyle,
                 cursor: "pointer",
                 textAlign: "center",
-                bgcolor: activeFeature === "speechToText" ? "primary.main" : "",
+                bgcolor: activeFeature === "textToSpeech" ? "primary.main" : "",
+                color:
+                  activeFeature === "textToSpeech" ? "#fff" : "primary.main",
+                transition: "all .5s ease-in-out",
+              }}
+              onClick={() => router.push("texttospeech")}
+              xs={12}
+              md={3}
+              gap={2}
+              p={2}
+            >
+              <Grid item xs={12}>
+                <ChatIcon sx={{ fontSize: 64 }} />
+              </Grid>
+              <Grid item xs={12}>
+                <Typography variant="h5">Text To Speech</Typography>
+              </Grid>
+            </Grid>
+            <Grid
+              container
+              item
+              sx={{
+                ...glassmorphismStyle,
+                cursor: "pointer",
+                textAlign: "center",
+                bgcolor: activeFeature === "speechtotext" ? "primary.main" : "",
                 color:
                   activeFeature === "speechToText" ? "#fff" : "primary.main",
                 transition: "all .5s ease-in-out",
               }}
-              onClick={() => handleOpen("speechToText")}
+              onClick={() => router.push("speechtotext")}
               xs={12}
               md={3}
               gap={2}
@@ -168,61 +194,13 @@ const Hero = () => {
                 ...glassmorphismStyle,
                 cursor: "pointer",
                 textAlign: "center",
-                bgcolor: activeFeature === "signToText" ? "primary.main" : "",
-                color: activeFeature === "signToText" ? "#fff" : "primary.main",
-                transition: "all .5s ease-in-out",
-              }}
-              onClick={() => handleOpen("signToText")}
-              xs={12}
-              md={3}
-              gap={2}
-              p={2}
-            >
-              <Grid item xs={12}>
-                <VideocamIcon sx={{ fontSize: 64 }} />
-              </Grid>
-              <Grid item xs={12}>
-                <Typography variant="h5">Sign To Text</Typography>
-              </Grid>
-            </Grid>
-            <Grid
-              container
-              item
-              sx={{
-                ...glassmorphismStyle,
-                cursor: "pointer",
-                textAlign: "center",
-                bgcolor: activeFeature === "textToSign" ? "primary.main" : "",
-                color: activeFeature === "textToSign" ? "#fff" : "primary.main",
-                transition: "all .5s ease-in-out",
-              }}
-              onClick={() => handleOpen("textToSign")}
-              xs={12}
-              md={3}
-              gap={2}
-              p={2}
-            >
-              <Grid item xs={12}>
-                <SignLanguageIcon sx={{ fontSize: 64 }} />
-              </Grid>
-              <Grid item xs={12}>
-                <Typography variant="h5">Text To Sign Language</Typography>
-              </Grid>
-            </Grid>
-            <Grid
-              container
-              item
-              sx={{
-                ...glassmorphismStyle,
-                cursor: "pointer",
-                textAlign: "center",
                 bgcolor:
                   activeFeature === "speechToSpeech" ? "primary.main" : "",
                 color:
                   activeFeature === "speechToSpeech" ? "#fff" : "primary.main",
                 transition: "all .5s ease-in-out",
               }}
-              onClick={() => handleOpen("speechToSpeech")}
+              onClick={() => router.push("speechtospeech")}
               xs={12}
               md={3}
               gap={2}
@@ -242,22 +220,21 @@ const Hero = () => {
                 ...glassmorphismStyle,
                 cursor: "pointer",
                 textAlign: "center",
-                bgcolor: activeFeature === "textToSpeech" ? "primary.main" : "",
-                color:
-                  activeFeature === "textToSpeech" ? "#fff" : "primary.main",
+                bgcolor: activeFeature === "signToText" ? "primary.main" : "",
+                color: activeFeature === "signToText" ? "#fff" : "primary.main",
                 transition: "all .5s ease-in-out",
               }}
-              onClick={() => handleOpen("textToSpeech")}
+              onClick={() => router.push("signtotext")}
               xs={12}
               md={3}
               gap={2}
               p={2}
             >
               <Grid item xs={12}>
-                <ChatIcon sx={{ fontSize: 64 }} />
+                <VideocamIcon sx={{ fontSize: 64 }} />
               </Grid>
               <Grid item xs={12}>
-                <Typography variant="h5">Text To Speech</Typography>
+                <Typography variant="h5">Sign To Text</Typography>
               </Grid>
             </Grid>
             <Grid
@@ -267,12 +244,60 @@ const Hero = () => {
                 ...glassmorphismStyle,
                 cursor: "pointer",
                 textAlign: "center",
-                bgcolor: activeFeature === "textToSpeech" ? "primary.main" : "",
-                color:
-                  activeFeature === "textToSpeech" ? "#fff" : "primary.main",
+                bgcolor: activeFeature === "signToText" ? "primary.main" : "",
+                color: activeFeature === "signToText" ? "#fff" : "primary.main",
                 transition: "all .5s ease-in-out",
               }}
-              onClick={() => handleOpen("textToSpeech")}
+              onClick={() => handleOpen("textToSign")}
+              xs={12}
+              md={3}
+              gap={2}
+              p={2}
+            >
+              <Grid item xs={12}>
+                <VideocamIcon sx={{ fontSize: 64 }} />
+              </Grid>
+              <Grid item xs={12}>
+                <Typography variant="h5">Sign To 3D Sign Lang</Typography>
+              </Grid>
+            </Grid>
+            <Grid
+              container
+              item
+              sx={{
+                ...glassmorphismStyle,
+                cursor: "pointer",
+                textAlign: "center",
+                bgcolor: activeFeature === "textToSign" ? "primary.main" : "",
+                color: activeFeature === "textToSign" ? "#fff" : "primary.main",
+                transition: "all .5s ease-in-out",
+              }}
+              onClick={() => router.push("texttosign")}
+              xs={12}
+              md={3}
+              gap={2}
+              p={2}
+            >
+              <Grid item xs={12}>
+                <SignLanguageIcon sx={{ fontSize: 64 }} />
+              </Grid>
+              <Grid item xs={12}>
+                <Typography variant="h5">Text To Sign Language</Typography>
+              </Grid>
+            </Grid>
+
+            <Grid
+              container
+              item
+              sx={{
+                ...glassmorphismStyle,
+                cursor: "pointer",
+                textAlign: "center",
+                bgcolor: activeFeature === "signtosign" ? "primary.main" : "",
+                color: activeFeature === "signtosign" ? "#fff" : "primary.main",
+                transition: "all .5s ease-in-out",
+              }}
+              onClick={() => router.push("signtosign")}
               xs={12}
               md={3}
               gap={2}
