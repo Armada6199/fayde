@@ -97,7 +97,7 @@ const Hero = () => {
         console.log(e.data.output.generic[0].text);
       },
     });
-    instance.updateCSSVariables();
+    instance?.updateCSSVariables();
   }, [instance]);
   return (
     <Grid container item height={"calc(100vh - 60px)"} p={4} gap={4}>
