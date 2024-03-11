@@ -3,6 +3,15 @@ import { useState, useRef, useEffect } from "react";
 import axios from "axios";
 import { saveAs } from "file-saver";
 import { WebChatContainer } from "@ibm-watson/assistant-web-chat-react";
+import {
+  HeroContent,
+  HeroDescription,
+  HeroTitle,
+  MaxWidthContainer,
+  SectionHeader,
+} from "../components/HeroText";
+import { Button } from "@mui/material";
+import { Box } from "@mui/system";
 const mimeType = "audio/mp3";
 const webChatOptions = {
   integrationID: "dafaa13b-18bf-4e88-aff5-649228cb84f7", // The ID of this integration.
@@ -118,49 +127,66 @@ const AudioRecorder = () => {
   }, [instance]);
   return (
     <>
-      <div>
-        <h2>Audio Recorder</h2>
-        <main>
-          <div className="audio-controls">
-            {!permission ? (
-              <button onClick={getMicrophonePermission} type="button">
-                Get Microphone
-              </button>
-            ) : null}
-            {permission && recordingStatus === "inactive" ? (
-              <button onClick={startRecording} type="button">
-                Start Recording
-              </button>
-            ) : null}
-            {recordingStatus === "recording" ? (
-              <button onClick={stopRecording} type="button">
-                stop Recording
-              </button>
-            ) : null}
-          </div>
-          <div>
-            {audio ? (
-              <div className="audio-container">
-                <audio src={audio} controls></audio>
-                {/* <a download href={audio}>
-                  Download Recording
-                </a> */}
-              </div>
-            ) : null}
-            {respondSpeech ? (
-              <div className="audio-container">
-                <audio
-                  src={`data:audio/mp3;base64,${respondSpeech}`}
-                  controls
-                ></audio>
-                {/* <a download href={audio}>
-                  Download Recording
-                </a> */}
-              </div>
-            ) : null}
-          </div>
-        </main>
-      </div>
+      <Box>
+        <HeroContent>
+          <SectionHeader>
+            <HeroTitle data-aos="zoom-y-out">
+              Turn Speech Into <span>Speech</span>
+            </HeroTitle>
+            <HeroDescription data-aos="zoom-y-out" data-aos-delay="150">
+              Once you are ready click on the Button below to start recording
+            </HeroDescription>
+            <MaxWidthContainer data-aos="zoom-y-out" data-aos-delay="300">
+              <main>
+                <Box className="audio-controls">
+                  {!permission ? (
+                    <Button
+                      variant="contained"
+                      onClick={getMicrophonePermission}
+                      type="Button"
+                    >
+                      Get Microphone
+                    </Button>
+                  ) : null}
+                  {permission && recordingStatus === "inactive" ? (
+                    <Button
+                      variant="contained"
+                      onClick={startRecording}
+                      type="Button"
+                    >
+                      Start Recording
+                    </Button>
+                  ) : null}
+                  {recordingStatus === "recording" ? (
+                    <Button
+                      variant="contained"
+                      onClick={stopRecording}
+                      type="Button"
+                    >
+                      stop Recording
+                    </Button>
+                  ) : null}
+                </Box>
+                <Box sx={{ mt: 4 }}>
+                  {audio ? (
+                    <Box className="audio-container">
+                      <audio src={audio} controls></audio>
+                    </Box>
+                  ) : null}
+                  {respondSpeech ? (
+                    <Box className="audio-container">
+                      <audio
+                        src={`data:audio/mp3;base64,${respondSpeech}`}
+                        controls
+                      ></audio>
+                    </Box>
+                  ) : null}
+                </Box>
+              </main>
+            </MaxWidthContainer>
+          </SectionHeader>
+        </HeroContent>
+      </Box>
       <WebChatContainer config={webChatOptions} onBeforeRender={setInstance} />{" "}
     </>
   );

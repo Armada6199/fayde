@@ -2,6 +2,13 @@
 import { WebChatContainer } from "@ibm-watson/assistant-web-chat-react";
 import { Grid, Typography } from "@mui/material";
 import axios from "axios";
+import {
+  HeroContent,
+  HeroDescription,
+  HeroTitle,
+  MaxWidthContainer,
+  SectionHeader,
+} from "../components/HeroText";
 import React, { useEffect, useState } from "react";
 const webChatOptions = {
   integrationID: "cf134e1a-14b7-4d0c-b7c1-4684c9d5e536", // The ID of this integration.
@@ -39,17 +46,26 @@ function page() {
       flexDirection={"column"}
       gap={8}
     >
-      <Grid item>
-        {voiceResponse ? (
-          <audio src={`data:audio/mpeg;base64,${voiceResponse}`} controls>
-            test
-          </audio>
-        ) : (
-          <Typography variant="h2">
+      <HeroContent>
+        <SectionHeader>
+          <HeroTitle data-aos="zoom-y-out">
+            Turn Text Into <span>Speech</span>
+          </HeroTitle>
+          <HeroDescription data-aos="zoom-y-out" data-aos-delay="150">
             Speech will appear here once loaded
-          </Typography>
-        )}
-      </Grid>
+          </HeroDescription>
+          <MaxWidthContainer data-aos="zoom-y-out" data-aos-delay="300">
+            <Grid item>
+              {voiceResponse && (
+                <audio src={`data:audio/mpeg;base64,${voiceResponse}`} controls>
+                  test
+                </audio>
+              )}
+            </Grid>
+          </MaxWidthContainer>
+        </SectionHeader>
+      </HeroContent>
+
       <WebChatContainer config={webChatOptions} onBeforeRender={setInstance} />
     </Grid>
   );

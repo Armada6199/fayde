@@ -16,7 +16,7 @@ const navActions = [
   { text: "Speech to text", link: "speechtotext" },
   { text: "Text to speech", link: "texttospeech" },
   { text: "Speech to Speech", link: "speechtospeech" },
-  { text: "Sign Langauge To Text", link: "videototext" },
+  { text: "Sign Langauge To Text", link: "signtotext" },
   { text: "Text to Sign Langauge", link: "texttosign" },
   { text: "Sign Lanagauge to sign Langauge", link: "signtosign" },
 ];

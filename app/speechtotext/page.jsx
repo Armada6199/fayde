@@ -4,6 +4,13 @@ import React, { useCallback, useRef, useState } from "react";
 import AudioRecorder from "../components/utils/VoiceRecorder";
 import { WebChatContainer } from "@ibm-watson/assistant-web-chat-react";
 import { Grid } from "@mui/material";
+import {
+  HeroContent,
+  HeroDescription,
+  HeroTitle,
+  MaxWidthContainer,
+  SectionHeader,
+} from "../components/HeroText";
 
 const webChatOptions = {
   integrationID: "cf134e1a-14b7-4d0c-b7c1-4684c9d5e536", // The ID of this integration.
@@ -18,51 +25,11 @@ function page() {
   const instanceRef = useRef(null);
   const [speechText, setSpeechText] = useState(null);
 
-  const HeroContent = styled("div")({
-    maxWidth: "6xl",
-    margin: "auto",
-    padding: "4rem 2rem",
-  });
-
-  const SectionHeader = styled("div")({
-    textAlign: "center",
-    paddingBottom: "4rem",
-  });
-
-  const HeroTitle = styled("h1")({
-    fontSize: "2.5rem",
-    "@media (min-width: 768px)": {
-      fontSize: "3rem",
-    },
-    fontWeight: "bold",
-    lineHeight: "1.2",
-    marginBottom: "1rem",
-    "& span": {
-      backgroundClip: "text",
-      color: "transparent",
-      backgroundImage: "linear-gradient(to right, #165634, #165634)",
-    },
-  });
-
-  const HeroDescription = styled("p")({
-    fontSize: "1.25rem",
-    color: "#718096",
-    marginBottom: "2rem",
-  });
   const toggleWebChat = (currentInstance) => {
     // instance.toggleOpen();
     currentInstance.send(speechText);
   };
 
-  const MaxWidthContainer = styled("div")({
-    maxWidth: "48rem",
-    margin: "auto",
-    "@media (min-width: 640px)": {
-      display: "flex",
-      justifyContent: "center",
-      gap: 12,
-    },
-  });
   return (
     <Grid container>
       <HeroContent>

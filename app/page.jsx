@@ -1,17 +1,17 @@
 "use client";
-import React, { useCallback, useEffect, useState } from "react";
-import { styled } from "@mui/system";
-import FeaturesHOC from "./components/FeaturesHOC.jsx";
-import { Button, Grid, Modal, Typography } from "@mui/material";
-import { WebChatContainer } from "@ibm-watson/assistant-web-chat-react";
-import MicIcon from "@mui/icons-material/Mic";
-import VideocamIcon from "@mui/icons-material/Videocam";
-import SignLanguageIcon from "@mui/icons-material/SignLanguage";
-import RecordVoiceOverIcon from "@mui/icons-material/RecordVoiceOver";
 import { glassmorphismStyle } from "@/styles/styles";
+import { WebChatContainer } from "@ibm-watson/assistant-web-chat-react";
 import ChatIcon from "@mui/icons-material/Chat";
+import MicIcon from "@mui/icons-material/Mic";
+import RecordVoiceOverIcon from "@mui/icons-material/RecordVoiceOver";
+import SignLanguageIcon from "@mui/icons-material/SignLanguage";
+import VideocamIcon from "@mui/icons-material/Videocam";
 import WavingHandIcon from "@mui/icons-material/WavingHand";
+import { Grid, Modal, Typography } from "@mui/material";
+import { styled } from "@mui/system";
 import { useRouter } from "next/navigation";
+import React, { useCallback, useEffect, useState } from "react";
+import FeaturesHOC from "./components/FeaturesHOC.jsx";
 const HeroSection = styled("section")({
   position: "relative",
   height: "calc(100vh - 120px)",
@@ -25,46 +25,13 @@ const webChatOptions = {
   // Note that there is no onLoad property here. The WebChatContainer component will override it.
   // Use the onBeforeRender or onAfterRender prop instead.
 };
-const IllustrationContainer = styled("div")({
+export const IllustrationContainer = styled("div")({
   position: "absolute",
   left: "50%",
   transform: "translateX(-50%)",
   bottom: 0,
   pointerEvents: "none",
   zIndex: -1,
-});
-
-const HeroContent = styled("div")({
-  maxWidth: "6xl",
-  margin: "auto",
-  padding: "4rem 2rem",
-  bgcolor: "#f3f3f3",
-});
-
-const SectionHeader = styled("div")({
-  textAlign: "center",
-  paddingBottom: "4rem",
-});
-
-const HeroTitle = styled("h1")({
-  fontSize: "2.5rem",
-  "@media (min-width: 768px)": {
-    fontSize: "3rem",
-  },
-  fontWeight: "bold",
-  lineHeight: "1.2",
-  marginBottom: "1rem",
-  "& span": {
-    backgroundClip: "text",
-    color: "transparent",
-    backgroundImage: "linear-gradient(to right, #165634, #45785d)",
-  },
-});
-
-const HeroDescription = styled("p")({
-  fontSize: "1.25rem",
-  color: "#718096",
-  marginBottom: "2rem",
 });
 
 const Hero = () => {
@@ -103,7 +70,6 @@ const Hero = () => {
   return (
     <Grid container item height={"calc(100vh - 60px)"} p={4} gap={4}>
       <HeroSection>
-        {/* Illustration behind hero content */}
         <IllustrationContainer aria-hidden="true">
           <svg
             width="100vw"

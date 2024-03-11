@@ -1,7 +1,7 @@
-.WACWidget {
+/* .WACWidget {
   background-color: red !important;
   width: 50vh !important;
-}
+} */
 #WACContainer.WACContainer .HideWebChat {
   display: none;
 }

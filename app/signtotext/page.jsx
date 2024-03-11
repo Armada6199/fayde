@@ -3,32 +3,14 @@ import styled from "@emotion/styled";
 import React, { useState } from "react";
 import VideoRecorder from "../components/utils/VideoRecored";
 import { Grid } from "@mui/material";
-
+import {
+  HeroContent,
+  HeroDescription,
+  HeroTitle,
+  MaxWidthContainer,
+  SectionHeader,
+} from "../components/HeroText";
 function page() {
-  const HeroContent = styled("div")({
-    maxWidth: "6xl",
-    padding: "4rem 2rem",
-    backgroundColor: "#f3f3f3",
-    width: "100vw",
-  });
-  const SectionHeader = styled("div")({
-    textAlign: "center",
-    paddingBottom: "4rem",
-  });
-  const HeroTitle = styled("h1")({
-    fontSize: "2.5rem",
-    "@media (min-width: 768px)": {
-      fontSize: "3rem",
-    },
-    fontWeight: "bold",
-    lineHeight: "1.2",
-    marginBottom: "1rem",
-    "& span": {
-      backgroundClip: "text",
-      color: "transparent",
-      backgroundImage: "linear-gradient(to right, #2563eb, #38a3f1)",
-    },
-  });
   const [videoSpeech, setVideoSpeech] = useState(null);
   const HeroDescription = styled("p")({
     fontSize: "1.25rem",
