@@ -1,10 +1,10 @@
-import { Canvas } from "@react-three/fiber";
-import React, { Suspense, useState } from "react";
-import { OrbitControls } from "@react-three/drei";
 import { HelloModel } from "@/app/speechtosign/Hello";
-import { Grid } from "@mui/material";
-import { WebChatContainer } from "@ibm-watson/assistant-web-chat-react";
 import "@/styles/chatbot.css";
+import { WebChatContainer } from "@ibm-watson/assistant-web-chat-react";
+import { Grid } from "@mui/material";
+import { OrbitControls } from "@react-three/drei";
+import { Canvas } from "@react-three/fiber";
+import { Suspense, useState } from "react";
 const webChatOptions = {
   integrationID: "cf134e1a-14b7-4d0c-b7c1-4684c9d5e536", // The ID of this integration.
   region: "eu-gb", // The region your integration is hosted in.

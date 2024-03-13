@@ -4,7 +4,7 @@ const nextConfig = {
     return [
       {
         source: "/speechtotext",
-        destination: `https://3a8c-178-20-188-157.ngrok-free.app/api/*`,
+        destination: `https://6a2f-154-182-100-46.ngrok-free.app/*`,
       },
     ];
   },

@@ -1,9 +1,7 @@
 "use client";
-import styled from "@emotion/styled";
-import React, { useCallback, useRef, useState } from "react";
-import AudioRecorder from "../components/utils/VoiceRecorder";
 import { WebChatContainer } from "@ibm-watson/assistant-web-chat-react";
 import { Grid } from "@mui/material";
+import { useEffect, useRef, useState } from "react";
 import {
   HeroContent,
   HeroDescription,
@@ -11,7 +9,7 @@ import {
   MaxWidthContainer,
   SectionHeader,
 } from "../components/HeroText";
-
+import AudioRecorder from "../components/utils/VoiceRecorder";
 const webChatOptions = {
   integrationID: "cf134e1a-14b7-4d0c-b7c1-4684c9d5e536", // The ID of this integration.
   region: "eu-gb", // The region your integration is hosted in.
@@ -24,11 +22,13 @@ function page() {
   // const [instance, setInstance] = useState(null);
   const instanceRef = useRef(null);
   const [speechText, setSpeechText] = useState(null);
+  const [instance, setInstance] = useState();
 
-  const toggleWebChat = (currentInstance) => {
-    // instance.toggleOpen();
-    currentInstance.send(speechText);
-  };
+  useEffect(() => {
+    if (instance) {
+      instance.send(speechText);
+    }
+  }, [speechText]);
 
   return (
     <Grid container>
@@ -52,8 +52,7 @@ function page() {
 
         <WebChatContainer
           config={webChatOptions}
-          onAfterRender={(instance) => toggleWebChat(instance)}
-          instanceRef={instanceRef}
+          onBeforeRender={setInstance}
         />
       </HeroContent>
     </Grid>

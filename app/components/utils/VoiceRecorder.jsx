@@ -1,11 +1,11 @@
 "use client";
-import { useState, useRef } from "react";
 import axios from "axios";
-import { saveAs } from "file-saver";
+import { useRef, useState } from "react";
 // import sendAudioForm from "./sendAudioForm";
+import MicIcon from "@mui/icons-material/Mic";
 import { Button } from "@mui/material";
 import { Box } from "@mui/system";
-import MicIcon from "@mui/icons-material/Mic";
+import "../../../styles/recording.css";
 
 const mimeType = "audio/mp3";
 
@@ -93,7 +93,7 @@ const AudioRecorder = ({ setSpeechText }) => {
       };
       blobToBase64(audioBlob, async function (base64String) {
         const response = await axios.post(
-          "https://5c18-178-20-188-157.ngrok-free.app/api/speech-to-text",
+          `${process.env.NEXT_PUBLIC_BACKEND_API}/api/speech-to-text?lang=ar`,
           base64String,
           { headers: headers }
         );

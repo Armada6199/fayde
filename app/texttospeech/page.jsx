@@ -1,7 +1,8 @@
 "use client";
 import { WebChatContainer } from "@ibm-watson/assistant-web-chat-react";
-import { Grid, Typography } from "@mui/material";
+import { Grid } from "@mui/material";
 import axios from "axios";
+import { useEffect, useState } from "react";
 import {
   HeroContent,
   HeroDescription,
@@ -9,7 +10,6 @@ import {
   MaxWidthContainer,
   SectionHeader,
 } from "../components/HeroText";
-import React, { useEffect, useState } from "react";
 const webChatOptions = {
   integrationID: "cf134e1a-14b7-4d0c-b7c1-4684c9d5e536", // The ID of this integration.
   region: "eu-gb", // The region your integration is hosted in.
@@ -23,13 +23,14 @@ function page() {
   };
 
   useEffect(() => {
-    // instance?.send("hello");
     instance?.on({
       type: "receive",
       handler: async (e) => {
         const response = await axios.post(
-          "https://5c18-178-20-188-157.ngrok-free.app/api/text-to-speech?lang=ar",
-          e.data.output.generic[0].text,
+          `${process.env.NEXT_PUBLIC_BACKEND_API}/api/text-to-speech?lang=ar`,
+          `${e.data.output.generic[0].text} ${
+            e.data.output.generic[1].text ? e.data.output.generic[1].text : ""
+          }`,
           { headers: headers }
         );
         setVoiceResponse(response.data);

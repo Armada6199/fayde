@@ -7,6 +7,7 @@ export function HelloModel(props) {
   const { actions } = useAnimations(animations, group);
   useEffect(() => {
     if (props.start) actions["Armature|mixamo.com|Layer0"].play();
+    actions;
   }, [props.start]);
   return (
     <group ref={group} {...props} dispose={null}>

@@ -92,7 +92,7 @@ const AudioRecorder = () => {
       };
       blobToBase64(audioBlob, async function (base64String) {
         const clientText = await axios.post(
-          "https://5c18-178-20-188-157.ngrok-free.app/api/speech-to-text?lang=en",
+          `${process.env.NEXT_PUBLIC_BACKEND_API}/api/speech-to-text?lang=en`,
           base64String,
           { headers: headers }
         );
@@ -102,7 +102,7 @@ const AudioRecorder = () => {
           type: "receive",
           handler: async (e) => {
             const chatBotVoice = await axios.post(
-              "https://5c18-178-20-188-157.ngrok-free.app/api/text-to-speech?lang=ar",
+              `${process.env.NEXT_PUBLIC_BACKEND_API}/api/text-to-speech?lang=ar`,
               e.data.output.generic[0].text,
               { headers: headers }
             );
@@ -118,12 +118,12 @@ const AudioRecorder = () => {
     }
   };
   useEffect(() => {
-    instance?.updateCSSVariables({
-      "BASE-width": "100vw",
-      "LAUNCHER-color-avatar": "#fff",
-      "LAUNCHER-color-background": "#165634",
-      "LAUNCHER-color-background-hover": "#165634",
-    });
+    // instance?.updateCSSVariables({
+    //   "BASE-width": "100vw",
+    //   "LAUNCHER-color-avatar": "#fff",
+    //   "LAUNCHER-color-background": "#165634",
+    //   "LAUNCHER-color-background-hover": "#165634",
+    // });
   }, [instance]);
   return (
     <>

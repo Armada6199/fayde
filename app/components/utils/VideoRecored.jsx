@@ -34,7 +34,7 @@ const VideoRecorder = ({ setVideoSpeech }) => {
       };
       blobToBase64(videoBlob, async function (base64String) {
         const response = await axios.post(
-          "https://5c18-178-20-188-157.ngrok-free.app/api/signLang-to-text?lang=ar",
+          `${process.env.NEXT_PUBLIC_BACKEND_API}/api/signLang-to-text?lang=ar`,
           base64String,
           { headers: headers }
         );

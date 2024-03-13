@@ -69,9 +69,17 @@ function page() {
           <HeroDescription data-aos="zoom-y-out" data-aos-delay="150">
             Once You Are ready Click the button Below to start Recording
           </HeroDescription>
+          <Grid container item>
+            <VideoRecorder setVideoSpeech={setVideoSpeech} />
+          </Grid>
           <MaxWidthContainer>
             {word && (
-              <Grid container item justifyContent={"center"}>
+              <Grid
+                container
+                item
+                alignItems={"center"}
+                justifyContent={"center"}
+              >
                 <Grid item xs={12} textAlign={"center"}>
                   <Typography variant="h4">
                     {word[currentImageIndex]}
@@ -92,9 +100,6 @@ function page() {
                 </Grid>
               </Grid>
             )}
-            <Grid container item>
-              <VideoRecorder setVideoSpeech={setVideoSpeech} />
-            </Grid>
           </MaxWidthContainer>
         </SectionHeader>
       </HeroContent>
