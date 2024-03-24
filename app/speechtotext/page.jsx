@@ -11,9 +11,9 @@ import {
 } from "../components/HeroText";
 import AudioRecorder from "../components/utils/VoiceRecorder";
 const webChatOptions = {
-  integrationID: "cf134e1a-14b7-4d0c-b7c1-4684c9d5e536", // The ID of this integration.
-  region: "eu-gb", // The region your integration is hosted in.
-  serviceInstanceID: "dd8f0bab-351b-4c0d-bcfc-3ef8dcb5958c", // The ID
+  integrationID: process.env.NEXT_PUBLIC_INTEGRATION_ID, // The ID of this integration.
+  region: process.env.NEXT_PUBLIC_REGION, // The region your integration is hosted in.
+  serviceInstanceID: process.env.SERVICE_INSTANCE_ID, // The ID
   // subscriptionID: 'only on enterprise plans',
   // Note that there is no onLoad property here. The WebChatContainer component will override it.
   // Use the onBeforeRender or onAfterRender prop instead.

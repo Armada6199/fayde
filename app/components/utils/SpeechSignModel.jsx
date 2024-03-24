@@ -1,61 +1,21 @@
 import { HelloModel } from "@/app/speechtosign/Hello";
 import "@/styles/chatbot.css";
 import { WebChatContainer } from "@ibm-watson/assistant-web-chat-react";
-import { Grid } from "@mui/material";
+import { Button, Grid } from "@mui/material";
 import { OrbitControls } from "@react-three/drei";
 import { Canvas } from "@react-three/fiber";
 import { Suspense, useState } from "react";
 const webChatOptions = {
-  integrationID: "cf134e1a-14b7-4d0c-b7c1-4684c9d5e536", // The ID of this integration.
-  region: "eu-gb", // The region your integration is hosted in.
-  serviceInstanceID: "dd8f0bab-351b-4c0d-bcfc-3ef8dcb5958c", // The ID
-  // subscriptionID: 'only on enterprise plans',
-  // Note that there is no onLoad property here. The WebChatContainer component will override it.
-  // Use the onBeforeRender or onAfterRender prop instead.
+  integrationID: process.env.NEXT_PUBLIC_INTEGRATION_ID,
+  region: process.env.NEXT_PUBLIC_REGION,
+  serviceInstanceID: process.env.SERVICE_INSTANCE_ID,
 };
 function SpeechSignModel() {
   const [start, setStart] = useState();
   const [instance, setInstance] = useState(null);
 
   return (
-    <Grid container item>
-      {/* <Grid
-        container
-        item
-        xs={12}
-        sx={{
-          bgcolor: "#fff",
-          borderTopRightRadius: "20px",
-          borderTopLeftRadius: "20px",
-        }}
-      >
-        <Grid item xs={10}>
-          <TextField
-            fullWidth
-            sx={{
-              borderRadius: "0px",
-              borderTopLeftRadius: "20px",
-              border: "none",
-              outline: "none",
-            }}
-            placeholder="Enter your text here"
-          />
-        </Grid>
-        <Grid item xs={2}>
-          <Button
-            fullWidth
-            variant="contained"
-            sx={{
-              height: "100%",
-              borderRadius: "0",
-              borderTopRightRadius: "20px",
-            }}
-            onClick={() => setStart(true)}
-          >
-            Convert
-          </Button>
-        </Grid>
-      </Grid> */}
+    <Grid container item gap={4}>
       <Grid container item>
         <Canvas
           camera={{ position: [2, 0, 7.25], fov: 15 }}
@@ -73,6 +33,19 @@ function SpeechSignModel() {
           </Suspense>
           <OrbitControls />
         </Canvas>
+      </Grid>
+      <Grid container item justifyContent={"center"}>
+        <Grid item xs={4}>
+          {start ? (
+            <Button variant="contained" onClick={() => setStart(false)}>
+              Stop
+            </Button>
+          ) : (
+            <Button variant="contained" onClick={() => setStart(true)}>
+              SAY HELLO
+            </Button>
+          )}
+        </Grid>
       </Grid>
       <Grid container item>
         <WebChatContainer

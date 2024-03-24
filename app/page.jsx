@@ -18,12 +18,9 @@ const HeroSection = styled("section")({
   width: "100%",
 });
 const webChatOptions = {
-  integrationID: "cf134e1a-14b7-4d0c-b7c1-4684c9d5e536", // The ID of this integration.
-  region: "eu-gb", // The region your integration is hosted in.
-  serviceInstanceID: "dd8f0bab-351b-4c0d-bcfc-3ef8dcb5958c", // The ID
-  // subscriptionID: 'only on enterprise plans',
-  // Note that there is no onLoad property here. The WebChatContainer component will override it.
-  // Use the onBeforeRender or onAfterRender prop instead.
+  integrationID: process.env.NEXT_PUBLIC_INTEGRATION_ID,
+  region: process.env.NEXT_PUBLIC_REGION,
+  serviceInstanceID: process.env.SERVICE_INSTANCE_ID,
 };
 export const IllustrationContainer = styled("div")({
   position: "absolute",
@@ -57,8 +54,6 @@ const Hero = () => {
   }, [instance]);
   const [activeFeature, setActiveFeature] = useState("");
   useEffect(() => {
-    console.log(instance);
-    instance?.send("hello");
     instance?.on({
       type: "receive",
       handler: (e) => {

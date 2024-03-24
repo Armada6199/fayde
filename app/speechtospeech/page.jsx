@@ -15,8 +15,8 @@ import { Box } from "@mui/system";
 const mimeType = "audio/mp3";
 const webChatOptions = {
   integrationID: "dafaa13b-18bf-4e88-aff5-649228cb84f7", // The ID of this integration.
-  region: "eu-gb", // The region your integration is hosted in.
-  serviceInstanceID: "dd8f0bab-351b-4c0d-bcfc-3ef8dcb5958c", // The ID of your service instance.
+  region: process.env.NEXT_PUBLIC_REGION, // The region your integration is hosted in.
+  serviceInstanceID: process.env.SERVICE_INSTANCE_ID, // The ID of your service instance.
 };
 const AudioRecorder = () => {
   const [permission, setPermission] = useState(false);
