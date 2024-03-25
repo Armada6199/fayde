@@ -64,8 +64,6 @@ function page() {
         }
       })
       .join("");
-    console.log(event.data.output.generic);
-    console.log(text);
     const chatBotVoice = await axios.post(
       `${process.env.NEXT_PUBLIC_BACKEND_API}/api/text-to-speech?lang=ar`,
       `${text} ${options}`,
