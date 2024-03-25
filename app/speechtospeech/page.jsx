@@ -117,14 +117,7 @@ const AudioRecorder = () => {
       console.error("Error uploading video:", error);
     }
   };
-  useEffect(() => {
-    // instance?.updateCSSVariables({
-    //   "BASE-width": "100vw",
-    //   "LAUNCHER-color-avatar": "#fff",
-    //   "LAUNCHER-color-background": "#165634",
-    //   "LAUNCHER-color-background-hover": "#165634",
-    // });
-  }, [instance]);
+
   return (
     <>
       <Box>

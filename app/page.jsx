@@ -10,18 +10,15 @@ import WavingHandIcon from "@mui/icons-material/WavingHand";
 import { Grid, Modal, Typography } from "@mui/material";
 import { styled } from "@mui/system";
 import { useRouter } from "next/navigation";
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import FeaturesHOC from "./components/FeaturesHOC.jsx";
+
 const HeroSection = styled("section")({
   position: "relative",
   height: "calc(100vh - 120px)",
   width: "100%",
 });
-const webChatOptions = {
-  integrationID: process.env.NEXT_PUBLIC_INTEGRATION_ID,
-  region: process.env.NEXT_PUBLIC_REGION,
-  serviceInstanceID: process.env.SERVICE_INSTANCE_ID,
-};
+
 export const IllustrationContainer = styled("div")({
   position: "absolute",
   left: "50%",
@@ -30,10 +27,15 @@ export const IllustrationContainer = styled("div")({
   pointerEvents: "none",
   zIndex: -1,
 });
-
+const webChatOptions = {
+  integrationID: process.env.NEXT_PUBLIC_INTEGRATION_ID,
+  region: process.env.NEXT_PUBLIC_REGION,
+  serviceInstanceID: process.env.SERVICE_INSTANCE_ID,
+};
 const Hero = () => {
   const router = useRouter();
   const [instance, setInstance] = useState(null);
+
   const [open, setOpen] = React.useState({
     speechToText: false,
     videoToText: false,
@@ -49,9 +51,6 @@ const Hero = () => {
     setOpen((prev) => ({ ...prev, [activeFeature]: false }));
   };
 
-  const toggleWebChat = useCallback(() => {
-    instance.toggleOpen();
-  }, [instance]);
   const [activeFeature, setActiveFeature] = useState("");
   useEffect(() => {
     instance?.on({
@@ -272,6 +271,7 @@ const Hero = () => {
               </Grid>
             </Grid>
           </Grid>
+
           <Modal
             open={open[activeFeature] || false}
             onClose={handleClose}
@@ -321,31 +321,3 @@ const Hero = () => {
 };
 
 export default Hero;
-
-// <HeroContent>
-// <SectionHeader>
-//   <HeroTitle data-aos="zoom-y-out">
-// Elevating Conversations Igniting <span>Innovation</span>
-//   </HeroTitle>
-//   <HeroDescription data-aos="zoom-y-out" data-aos-delay="150">
-//     Elevating Conversations Igniting Innovation
-//   </HeroDescription>
-//   <MaxWidthContainer data-aos="zoom-y-out" data-aos-delay="300">
-//     {/* Your additional content here */}
-//   </MaxWidthContainer>
-// </SectionHeader>
-{
-  /* <Grid container item justifyContent={"center"} gap={4}>
-  <Grid item xs={2}>
-    <Button fullWidth variant="outlined">
-      Explore Featuers
-    </Button>
-  </Grid>
-  <Grid item xs={2}>
-    <Button fullWidth variant="contained">
-      Try Our Assistant
-    </Button>
-  </Grid>
-</Grid> */
-}
-// </HeroContent>

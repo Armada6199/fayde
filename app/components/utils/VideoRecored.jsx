@@ -1,13 +1,13 @@
-import { Button, Grid, Typography } from "@mui/material";
-import { useState, useRef } from "react";
-import StopCircleIcon from "@mui/icons-material/StopCircle";
+import { glassmorphismStyle } from "@/styles/styles";
 import PlayCircleIcon from "@mui/icons-material/PlayCircle";
 import SendIcon from "@mui/icons-material/Send";
-import { glassmorphismStyle } from "@/styles/styles";
+import StopCircleIcon from "@mui/icons-material/StopCircle";
 import TvIcon from "@mui/icons-material/Tv";
-import "../../../styles/video.css";
-import axios from "axios";
+import { Grid, Typography } from "@mui/material";
 import { Box } from "@mui/system";
+import axios from "axios";
+import { useRef, useState } from "react";
+import "../../../styles/video.css";
 const mimeType = "video/webm";
 
 const VideoRecorder = ({ setVideoSpeech }) => {
