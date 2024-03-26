@@ -6,7 +6,6 @@ import { Grid, Modal } from "@mui/material";
 import { Box } from "@mui/system";
 import { useEffect, useState } from "react";
 import "../../styles/recording.css";
-
 import VideoRecorder from "../components/utils/VideoRecored";
 import axios from "axios";
 
@@ -57,7 +56,6 @@ function page() {
   const handleClose = () => setIsRecorderOpen(false);
   const [base64Video, setBase64Video] = useState("");
   const [chatbotResponse, setChatbotResponse] = useState(null);
-  const [images, setImages] = useState([]);
 
   async function preReceiveHandler(event) {
     const message = event.data;
@@ -66,19 +64,31 @@ function page() {
       handler: customResponseHandler,
     });
     const text = handleExtractChatbotText(event);
-    // const imagesArr = handleGetResponseImages(text, setImages);
+    const video = await axios
+      .post(
+        `${process.env.NEXT_PUBLIC_BACKEND_API}/api/imagesToVideo?lang=ar`,
+        text,
+        { headers: headers, responseType: "blob" }
+      )
+      .then((response) => {
+        const sourceData = URL.createObjectURL(response.data);
+        setBase64Video(sourceData);
+        return sourceData;
+      });
+    setBase64Video(video);
 
-    const videBlob = axios.post(
-      `${process.env.NEXT_PUBLIC_BACKEND_API}/textToSign?lang=ar`,
-      text,
-      {
-        headers: headers,
-      }
-    );
     if (message.output.generic) {
       message.output.generic[message.output.generic.length] = {
         response_type: "video",
-        source: `data:video/webm;base64,${base64Video}`,
+        source: video,
+        title: "Signs",
+        description: "Converted Sign to Sign",
+        alt_text: "Sign",
+        chat: {
+          dimensions: {
+            base_height: 300,
+          },
+        },
       };
     }
   }
@@ -107,15 +117,20 @@ function page() {
           sx={{ width: 32, height: 32 }}
         />
       </Box>
-      {/* {images.map((image) => (
-        <Box component={"img"} src={image.src} alt="SIGN IMAGE" />
-      ))} */}
       {base64Video && (
-        <video controls>
-          {console.log(base64Video)}
-          <source src={base64Video} type="video/webm" />
-        </video>
+        <Box
+          position={"absolute"}
+          width={"200px"}
+          height={"200px"}
+          zIndex={999999}
+          right={100}
+        >
+          <video controls style={{ width: "200px", height: "200px" }} autoPlay>
+            <source src={base64Video} type="video/mp4" />
+          </video>
+        </Box>
       )}
+
       <Modal
         open={isRecorderOpen}
         sx={{
