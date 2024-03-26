@@ -104,19 +104,21 @@ function page() {
 
   return (
     <Grid container>
-      <Box
-        position={"absolute"}
-        bottom={30}
-        right={40}
-        sx={{ cursor: "pointer" }}
-        onClick={handleOpen}
-        zIndex={999999}
-      >
-        <VideocamIcon
-          className={recordingStatus === "inactive" ? "" : "pulse_recording"}
-          sx={{ width: 32, height: 32 }}
-        />
-      </Box>
+      {instance && (
+        <Box
+          position={"absolute"}
+          bottom={30}
+          right={40}
+          sx={{ cursor: "pointer" }}
+          onClick={handleOpen}
+          zIndex={999999}
+        >
+          <VideocamIcon
+            className={recordingStatus === "inactive" ? "" : "pulse_recording"}
+            sx={{ width: 32, height: 32, color: "primary.main" }}
+          />
+        </Box>
+      )}
       {base64Video && (
         <Box
           position={"absolute"}
@@ -142,7 +144,7 @@ function page() {
         }}
         onClose={handleClose}
       >
-        <Grid container item xs={8}>
+        <Grid container item xs={4}>
           <VideoRecorder setVideoSpeech={setChatbotResponse} />
         </Grid>
       </Modal>

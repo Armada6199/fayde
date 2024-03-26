@@ -168,25 +168,27 @@ function page() {
   }, [instance, respondSpeech]);
   return (
     <Grid container>
-      <Box
-        position={"absolute"}
-        bottom={30}
-        right={40}
-        sx={{ cursor: "pointer" }}
-        onClick={() =>
-          !permission
-            ? getMicrophonePermission()
-            : recordingStatus == "recording"
-            ? stopRecording()
-            : startRecording()
-        }
-        zIndex={999999}
-      >
-        <MicIcon
-          className={recordingStatus === "inactive" ? "" : "pulse_recording"}
-          sx={{ width: 32, height: 32 }}
-        />
-      </Box>
+      {instance && (
+        <Box
+          position={"absolute"}
+          bottom={30}
+          right={40}
+          sx={{ cursor: "pointer" }}
+          onClick={() =>
+            !permission
+              ? getMicrophonePermission()
+              : recordingStatus == "recording"
+              ? stopRecording()
+              : startRecording()
+          }
+          zIndex={999999}
+        >
+          <MicIcon
+            className={recordingStatus === "inactive" ? "" : "pulse_recording"}
+            sx={{ width: 32, height: 32 }}
+          />
+        </Box>
+      )}
       <WebChatContainer config={webChatOptions} onBeforeRender={setInstance} />
     </Grid>
   );
