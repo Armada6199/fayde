@@ -10,7 +10,12 @@ import { useRef, useState } from "react";
 import "../../../styles/video.css";
 const mimeType = "video/webm";
 
-const VideoRecorder = ({ setVideoSpeech }) => {
+const VideoRecorder = ({
+  setVideoSpeech,
+  base64Video,
+  setIsRecorderOpen,
+  setIsLoading,
+}) => {
   const [permission, setPermission] = useState(false);
   const mediaRecorder = useRef(null);
   const liveVideoFeed = useRef(null);
@@ -32,15 +37,17 @@ const VideoRecorder = ({ setVideoSpeech }) => {
       const headers = {
         "Content-Type": "application/json",
       };
+      setIsLoading({ status: true, message: "Generating Text from video" });
+      setIsRecorderOpen(false);
       blobToBase64(videoBlob, async function (base64String) {
         const response = await axios.post(
           `${process.env.NEXT_PUBLIC_BACKEND_API}/api/signLang-to-text?lang=ar`,
           base64String,
           { headers: headers }
         );
-        console.log(response.data);
         setVideoSpeech(response.data);
         // toggleWebChat();
+        setIsLoading({ status: false, message: "" });
       });
       // Handle the response (e.g., show a success message)
     } catch (error) {
@@ -195,7 +202,7 @@ const VideoRecorder = ({ setVideoSpeech }) => {
               }}
             >
               <video
-                src={recordedVideo}
+                src={base64Video ? base64Video : recordedVideo}
                 autoPlay
                 style={{
                   width: "100%",
@@ -206,6 +213,7 @@ const VideoRecorder = ({ setVideoSpeech }) => {
               ></video>
             </Box>
           )}
+
           {!recordedVideo && recordingStatus == "inactive" && (
             <Grid
               container

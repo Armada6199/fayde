@@ -1,32 +1,12 @@
 "use client";
-import { Grid } from "@mui/material";
+import { Grid, Typography } from "@mui/material";
 import { Box } from "@mui/system";
 import React, { useEffect, useRef, useState } from "react";
 import MicIcon from "@mui/icons-material/Mic";
 import { WebChatContainer } from "@ibm-watson/assistant-web-chat-react";
 import "../../styles/recording.css";
 import axios from "axios";
-function convertToVideo(images, frameRate, callback) {
-  var encoder = new Whammy.Video(frameRate);
-  var count = 0;
-
-  function addFrame(canvas) {
-    encoder.add(canvas.toDataURL("image/webp"));
-    count++;
-    if (count === images.length) {
-      var blob = encoder.compile();
-      var reader = new FileReader();
-      reader.onload = function () {
-        callback(reader.result);
-      };
-      reader.readAsDataURL(blob);
-    }
-  }
-
-  images.forEach(function (base64) {
-    base64ToCanvas(base64, addFrame);
-  });
-}
+import "../../styles/chatbot.css";
 
 function customResponseHandler(event) {
   const { message, element, fullMessage } = event.data;
@@ -49,6 +29,9 @@ function page() {
   const [audio, setAudio] = useState(null);
   const [respondSpeech, setRespondSpeech] = useState("");
   const [instance, setInstance] = useState(null);
+  const [isOpen, setIsOpen] = useState(false);
+  const [isLoading, setIsLoading] = useState({ status: false, message: "" });
+
   async function preReceiveHandler(event) {
     const headers = {
       "Content-Type": "application/json",
@@ -64,6 +47,7 @@ function page() {
         }
       })
       .join("");
+    setIsLoading({ status: true, message: "Generating Speech from Speech" });
     const chatBotVoice = await axios.post(
       `${process.env.NEXT_PUBLIC_BACKEND_API}/api/text-to-speech?lang=ar`,
       `${text} ${options}`,
@@ -79,6 +63,7 @@ function page() {
         source: `data:audio/webm;base64,${chatBotVoice.data}`,
       };
     }
+    setIsLoading({ status: false, message: "" });
   }
   const getMicrophonePermission = async () => {
     if ("MediaRecorder" in window) {
@@ -143,6 +128,7 @@ function page() {
       const headers = {
         "Content-Type": "application/json",
       };
+      setIsLoading({ status: true, message: "Generating text from Speech" });
       blobToBase64(audioBlob, async function (base64String) {
         const clientText = await axios.post(
           `${process.env.NEXT_PUBLIC_BACKEND_API}/api/speech-to-text?lang=en`,
@@ -155,6 +141,7 @@ function page() {
           type: "pre:receive",
           handler: (event) => preReceiveHandler(event),
         });
+        setIsLoading({ status: false, message: "" });
       });
     } catch (error) {
       console.error("Error uploading video:", error);
@@ -166,9 +153,20 @@ function page() {
     }
     instance?.updateCSSVariables();
   }, [instance, respondSpeech]);
+  useEffect(() => {
+    instance?.on({ type: "receive", handler: () => setIsOpen(true) });
+    const updateLocale = async () => await instance?.updateLocale("ar");
+    updateLocale();
+  }, [instance]);
   return (
     <Grid container>
-      {instance && (
+      {isLoading.status && isOpen && (
+        <Box position={"absolute"} bottom={150} right={100} zIndex={999999}>
+          <span class="loader"></span>
+          <Typography variant="body2">{isLoading.message}</Typography>
+        </Box>
+      )}
+      {isOpen && (
         <Box
           position={"absolute"}
           bottom={30}

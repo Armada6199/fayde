@@ -2,12 +2,13 @@
 import arabicLetterImages from "@/public/sign";
 import { WebChatContainer } from "@ibm-watson/assistant-web-chat-react";
 import VideocamIcon from "@mui/icons-material/Videocam";
-import { Grid, Modal } from "@mui/material";
+import { Grid, Modal, Typography } from "@mui/material";
 import { Box } from "@mui/system";
 import { useEffect, useState } from "react";
 import "../../styles/recording.css";
 import VideoRecorder from "../components/utils/VideoRecored";
 import axios from "axios";
+import "../../styles/chatbot.css";
 
 function customResponseHandler(event) {
   const { message, element, fullMessage } = event.data;
@@ -56,7 +57,8 @@ function page() {
   const handleClose = () => setIsRecorderOpen(false);
   const [base64Video, setBase64Video] = useState("");
   const [chatbotResponse, setChatbotResponse] = useState(null);
-
+  const [isOpen, setIsOpen] = useState(false);
+  const [isLoading, setIsLoading] = useState({ status: false, message: "" });
   async function preReceiveHandler(event) {
     const message = event.data;
     instance?.on({
@@ -64,6 +66,10 @@ function page() {
       handler: customResponseHandler,
     });
     const text = handleExtractChatbotText(event);
+    setIsLoading({
+      status: true,
+      message: "Generating Sign from Text ",
+    });
     const video = await axios
       .post(
         `${process.env.NEXT_PUBLIC_BACKEND_API}/api/imagesToVideo?lang=ar`,
@@ -75,22 +81,23 @@ function page() {
         setBase64Video(sourceData);
         return sourceData;
       });
+    setIsLoading({ status: false, message: "" });
     setBase64Video(video);
 
-    if (message.output.generic) {
-      message.output.generic[message.output.generic.length] = {
-        response_type: "video",
-        source: video,
-        title: "Signs",
-        description: "Converted Sign to Sign",
-        alt_text: "Sign",
-        chat: {
-          dimensions: {
-            base_height: 300,
-          },
-        },
-      };
-    }
+    // if (message.output.generic) {
+    //   message.output.generic[message.output.generic.length] = {
+    //     response_type: "video",
+    //     source: video,
+    //     title: "Signs",
+    //     description: "Converted Sign to Sign",
+    //     alt_text: "Sign",
+    //     chat: {
+    //       dimensions: {
+    //         base_height: 300,
+    //       },
+    //     },
+    //   };
+    // }
   }
   useEffect(() => {
     if (chatbotResponse) {
@@ -101,10 +108,14 @@ function page() {
       });
     }
   }, [chatbotResponse]);
-
+  useEffect(() => {
+    instance?.on({ type: "receive", handler: () => setIsOpen(true) });
+    const updateLocale = async () => await instance?.updateLocale("ar");
+    updateLocale();
+  }, [instance]);
   return (
     <Grid container>
-      {instance && (
+      {isOpen && (
         <Box
           position={"absolute"}
           bottom={30}
@@ -115,7 +126,7 @@ function page() {
         >
           <VideocamIcon
             className={recordingStatus === "inactive" ? "" : "pulse_recording"}
-            sx={{ width: 32, height: 32, color: "primary.main" }}
+            sx={{ width: 32, height: 32 }}
           />
         </Box>
       )}
@@ -123,7 +134,7 @@ function page() {
         <Box
           position={"absolute"}
           width={"200px"}
-          height={"200px"}
+          height={"150px"}
           zIndex={999999}
           right={100}
         >
@@ -132,7 +143,12 @@ function page() {
           </video>
         </Box>
       )}
-
+      {isLoading.status && isOpen && (
+        <Box position={"absolute"} bottom={150} right={100} zIndex={999999}>
+          <span class="loader"></span>
+          <Typography variant="body1">{isLoading.message}</Typography>
+        </Box>
+      )}
       <Modal
         open={isRecorderOpen}
         sx={{
@@ -145,10 +161,14 @@ function page() {
         onClose={handleClose}
       >
         <Grid container item xs={4}>
-          <VideoRecorder setVideoSpeech={setChatbotResponse} />
+          <VideoRecorder
+            setIsRecorderOpen={setIsRecorderOpen}
+            setVideoSpeech={setChatbotResponse}
+            setIsLoading={setIsLoading}
+          />
         </Grid>
       </Modal>
-      <WebChatContainer config={webChatOptions} onBeforeRender={setInstance} />
+      <WebChatContainer config={webChatOptions} onAfterRender={setInstance} />
     </Grid>
   );
 }
