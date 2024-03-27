@@ -130,7 +130,7 @@ function page() {
           />
         </Box>
       )}
-      {base64Video && (
+      {/* {base64Video && (
         <Box
           position={"absolute"}
           width={"200px"}
@@ -142,7 +142,7 @@ function page() {
             <source src={base64Video} type="video/mp4" />
           </video>
         </Box>
-      )}
+      )} */}
       {isLoading.status && isOpen && (
         <Box position={"absolute"} bottom={150} right={100} zIndex={999999}>
           <span class="loader"></span>
