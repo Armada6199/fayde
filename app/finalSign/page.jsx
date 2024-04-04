@@ -83,21 +83,6 @@ function page() {
       });
     setIsLoading({ status: false, message: "" });
     setBase64Video(video);
-
-    // if (message.output.generic) {
-    //   message.output.generic[message.output.generic.length] = {
-    //     response_type: "video",
-    //     source: video,
-    //     title: "Signs",
-    //     description: "Converted Sign to Sign",
-    //     alt_text: "Sign",
-    //     chat: {
-    //       dimensions: {
-    //         base_height: 300,
-    //       },
-    //     },
-    //   };
-    // }
   }
   useEffect(() => {
     if (chatbotResponse) {
@@ -130,7 +115,14 @@ function page() {
           />
         </Box>
       )}
-      {/* {base64Video && (
+
+      {isLoading.status && isOpen && (
+        <Box position={"absolute"} bottom={150} right={100} zIndex={999999}>
+          <span class="loader"></span>
+          <Typography variant="body1">{isLoading.message}</Typography>
+        </Box>
+      )}
+      {base64Video && (
         <Box
           position={"absolute"}
           width={"200px"}
@@ -141,12 +133,6 @@ function page() {
           <video controls style={{ width: "200px", height: "200px" }} autoPlay>
             <source src={base64Video} type="video/mp4" />
           </video>
-        </Box>
-      )} */}
-      {isLoading.status && isOpen && (
-        <Box position={"absolute"} bottom={150} right={100} zIndex={999999}>
-          <span class="loader"></span>
-          <Typography variant="body1">{isLoading.message}</Typography>
         </Box>
       )}
       <Modal
